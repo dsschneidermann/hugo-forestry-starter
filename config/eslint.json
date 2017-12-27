@@ -4,10 +4,6 @@
             2,
             2
         ],
-        "linebreak-style": [
-            2,
-            "unix"
-        ],
         "quote-props": [
             2,
             "as-needed"

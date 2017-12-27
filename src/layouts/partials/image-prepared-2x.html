@@ -1,0 +1,21 @@
+{{ $path := . }}
+{{/* --- Create img with 2x srcset based on image path --- */}}
+
+{{ $ext := index (findRE "\\.[^\\.]*$" $path 1) 0 }}
+{{ $filename := $path | strings.TrimSuffix $ext }}
+
+{{ $formatStr := "%s%s%s" }}
+{{ $normalSize := "" }}
+{{ $doubleSize := "@2x" }}
+
+{{ $imagePath := (printf $formatStr $filename $normalSize $ext)}}
+{{ $imageDoublePath := (printf $formatStr $filename $doubleSize $ext)}}
+
+{{/* Make sure both images can be found */}} 
+{{ $image := imageConfig (print "static" $imagePath) }}
+{{ $imageDouble := imageConfig (print "static" $imageDoublePath) }}
+
+<img src="{{ $imagePath | relURL }}"
+  width="{{ $image.Width }}px"
+  srcset="{{ $imagePath | relURL }} 1x,
+          {{ $imageDoublePath | relURL }} 2x">

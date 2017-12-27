@@ -1,22 +1,37 @@
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>{{ if .Title }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="apple-touch-icon" href="{{ .Site.BaseURL }}apple-touch-icon.png">
-
-  <!-- Hugo-specific bits -->
-  {{ if .RSSLink }}
-    <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
-    <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>
+  {{ if .IsHome }}
+    {{ .Site.Title }}
+  {{ else }}
+    {{ if .Title }}{{ .Title }} - {{ end }}{{ .Site.Title }}
   {{ end }}
-  {{ .Hugo.Generator }}
+</title>
+<meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ end }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- inject:css -->
-  <!-- endinject -->
+<!-- Hugo-specific bits -->
+{{ if .RSSLink }}
+  <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+  <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+{{ end }}
+{{ .Hugo.Generator }}
 
-  <!-- head:js -->
-  <!-- endinject -->
+<!-- Bootstrap Core CSS -->
+<link href='{{ "/css/bootstrap.min.css" | relURL }}' rel="stylesheet">
 
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<!-- Custom CSS -->
+<link href='{{ "/css/clean-blog.min.css" | relURL }}' rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+<!-- inject:css -->
+<!-- endinject -->
+
+<!-- head:js -->
+<!-- endinject -->
+
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">

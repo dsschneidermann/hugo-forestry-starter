@@ -1,0 +1,25 @@
+{{ $path := . }}
+
+{{/* --- Create img with srcset that matches processed images from the uploads folder --- */}}
+
+{{ if hasPrefix $path "/uploads/" }}
+  {{ $ext := index (findRE "\\.[^\\.]*$" $path 1) 0 }}
+  {{ $filename := ($path | strings.TrimPrefix "/uploads/") | strings.TrimSuffix $ext }}
+
+  {{/* formatStr is ('/images/') filename ('-') size ('x') extension, */}}
+  {{ $formatStr := "/images/%s-%sx%s" }}
+
+  {{/* Defines the widths to output, the first is fallback size */}}
+  {{ $set := slice "1280" "320" "640" "1920" }}
+  {{ $fallback := (printf $formatStr $filename (index $set 0) $ext) }}
+
+  {{ if fileExists (print "/static/" $fallback) }}
+    <img src="{{ $fallback | relURL }}"
+      srcset="{{ range $set }}{{ (printf $formatStr $filename . $ext) | relURL }} {{ string . }}w, {{ end }}"
+      sizes="100vw">
+  {{ else }}
+    <img src="{{ $path | relURL }}">
+  {{ end }}
+{{ else }}
+  <img src="{{ $path | relURL }}">
+{{ end }}

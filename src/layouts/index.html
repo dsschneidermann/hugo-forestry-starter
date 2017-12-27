@@ -1,24 +1,66 @@
 <!doctype html>
-<html class="no-js" lang="{{ .Site.LanguageCode}}">
-  <head>
-    {{ partial "head-meta.html" . }}
-  </head>
-  <body>
+<html class="no-js" lang="{{ .Site.LanguageCode }}">
+<head>
+  {{ partial "head-meta.html" . }}
+
+  <!-- Inlined stylesheet for preloader -->
+  <style type="text/css" media="all">
+    /* $inline.line("../styles/preloader.css|cssmin"); */
+  </style>
+
+  <!-- Inlined stylesheet for inlined-images -->
+  <style type="text/css" media="all">
+      /* $inline.line("../styles/inline-images.css|cssmin"); */
+  </style>  
+</head>
+<body>
     <!--[if lte IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
 
-    {{ partial "header.html" . }}
-    <div class="main-content">
-      <h1>Web Starter Hugo</h1>
-      <p>If you're seeing this file, that means you've successfully set up with Web Starter for Hugo, edit this in <code>src/layouts/index.html</code>.</p>
-      <p>An example content page: <a href="readme">Read me</a> (edit the file at: hugo/content/readme.md)</p>
-    </div>
+  <div class="preloader">
+    <div class="loader-image-anim"></div>
+  </div>
+  
+  {{ partial "header.html" . }}
 
+  <article>
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-6 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {{ if .Params.rendertoc }}
+                {{ .TableOfContents }}
+                {{ end }}
+                {{ .Content }}
+                {{ partial "comments.html" .}}
+              </div>
+              <div class="col-lg-2 lg-nopadding col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                <div class="instagram-widget">
+                  <p class="text-center">
+                    <img class="img-circle logo" src="https://scontent-sjc3-1.cdninstagram.com/t51.2885-19/s150x150/18444127_1925636914373421_3223144175625043968_a.jpg" alt="Røst">
+                  </p>
+                  <h3 class="text-center invert">Røst</h3>
+                  <ul class="list-inline text-center">
+                    <li>
+                    <a class="btn btn-primary" href="https://www.instagram.com/roestcph/" target="_blank">
+                        <span class="fa fa-lg fa-instagram">&nbsp;Følg os</span>
+                    </a></li>
+                  </ul>
+                <!-- LightWidget WIDGET --><script src="//lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/98d4fd1ece6a5b2bbecac2aa6b329a81.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
+              </div>
+            </div>
+          </div>
+      </div>
+  </article>
 
-    {{ partial "footer.html" . }}
+  {{ partial "footer.html" . }}
 
-    {{ partial "footer-scripts.html" . }}
+  {{ partial "footer-scripts.html" . }}
 
-  </body>
+  <!-- Inlined javascript for preloader -->
+  <script type="text/javascript">
+    /* $inline.line("../scripts/preloader/preloader.js"); */
+  </script>
+
+</body>
 </html>

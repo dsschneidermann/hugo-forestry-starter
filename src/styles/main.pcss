@@ -15,7 +15,7 @@
    ========================================================================== */
 
 html {
-  color: var(--text);
+  color: color(var(--text));
   font-size: 1em;
   line-height: 1.4;
 }
@@ -31,12 +31,12 @@ html {
  */
 
 ::-moz-selection {
-  background: var(--selection_bg);
+  background: color(var(--selection_bg));
   text-shadow: none;
 }
 
 ::selection {
-  background: var(--selection_bg);
+  background: color(var(--selection_bg));
   text-shadow: none;
 }
 
@@ -48,7 +48,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid var(--grey);
+  border-top: 1px solid color(var(--hrulecolor));
   margin: 1em 0;
   padding: 0;
 }
@@ -92,8 +92,8 @@ textarea {
 
 .browserupgrade {
   margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
+  background: color(var(--text));
+  color: color(var(--background));
   padding: 0.2em 0;
 }
 
@@ -101,22 +101,19 @@ textarea {
    Author's custom styles
    ========================================================================== */
 body {
-  background-color: var(--background);
+  color: color(var(--text));
+  background-color: color(var(--background));
 }
 
 header {
-  background-color: var(--text);
-  color: var(--background);
-  padding: 1em;
-}
-
-.main-content {
+  background-color: color(var(--text));
+  color: color(var(--background));
   padding: 1em;
 }
 
 footer {
-  background-color: var(--text);
-  color: var(--background);
+  color: color(var(--text));
+  background-color: color(var(--background));
   padding: 1em;
 }
 
@@ -204,19 +201,167 @@ footer {
   clear: both;
 }
 
-/* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
+/*
+ * Padding control
+ */
+ 
+@media only screen and (min-width: 768px) { 
+  .sm-nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */
+@media only screen and (min-width: 992px) { 
+  .md-nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) { 
+  .lg-nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+
+/* ==========================================================================
+   Responsive images
+   ========================================================================== */
+
+[data-responsive-background-image] {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+[data-responsive-background-image] img {
+  display: none;
+}
+
+
+/* ==========================================================================
+   Theme modifications
+   ========================================================================== */
+
+a, p a {
+  color: color(var(--link));
+  &:hover, &:focus {
+    color: color(var(--linkhover));
+  }
+}
+
+/* Footer icon alignments */
+footer {
+  & .fa.fa-facebook {
+    padding-right: 3px;
+  }
+  & .fa.fa-envelope-o {
+    padding-right: 1px;
+  }
+}
+
+/* Footer text align with Hugo logo */
+footer {
+  & .copyright {
+    font-size: 16px;
+    line-height: 23px;
+  }
+}
+
+/* Images */
+p img {
+  width: 100%;
+}
+a img {
+  cursor: pointer !important;
+}
+
+/* Menu */
+.navbar-brand img {
+   margin-top: -15px;
+   max-height: 50px;
+}
+
+@media only screen and (min-width: 768px) {
+  .navbar-custom .nav li a:hover, .navbar-custom .nav li a:focus {
+    color: color(var(--menulinkhover) a(.8));
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .navbar-custom.is-fixed .navbar-brand {
+    color: color(var(--menutitle));
+  }
+  .navbar-custom.is-visible {
+    -webkit-transform: translate3d(0,100%,0);
+    -moz-transform: translate3d(0,100%,0);
+    -ms-transform: translate3d(0,100%,0);
+    -o-transform: translate3d(0,100%,0);
+    transform: translate3d(0,100%,0);
+  }
+  .navbar-custom.is-fixed {
+    position: fixed;
+    top: -61px;
+    background-color: color(var(--menubackground) a(.9));
+    border-bottom: 1px solid color(var(--menubackground));
+    -webkit-transition: -webkit-transform .3s;
+    -moz-transition: -moz-transform .3s;
+    transition: transform .3s;
+  }
+  .navbar-custom {
+    -webkit-transition: background-color .3s;
+    -moz-transition: background-color .3s;
+    transition: background-color .3s;
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  .navbar-custom.is-fixed .nav li a {
+    color: color(var(--menulink));
+  }
+}
+
+/*
+Bootstrap media query sizes:
+small = (min-width:768px)
+medium = (min-width:992px)
+large = (min-width:1200px)
+*/
+
+/* Instagram widget (move to other file) */
+
+.instagram-widget {
+  background: color(var(--white));
+  padding: 10px;
+  & p {
+    margin: 10px 0;
+  }
+  & h3 {
+    color: color(var(--background));
+  }
+  & ul {
+    margin-bottom: 20px;
+  }
+  & .logo {
+    width: 60%;
+    max-width: 100px;
+    border: 1px solid #dbdbdb;
+  }
+  & .fa-lg {
+    line-height: 1.5em;
+  }
+  & .btn {
+    text-transform: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  & a {
+    text-decoration: none;
+  }
 }

@@ -6,9 +6,8 @@ var gulpLoadPlugins = require('gulp-load-plugins');
 var del = require('del');
 var lazypipe = require('lazypipe');
 var browserSync = require('browser-sync').create();
-var rsync = require('rsyncwrapper');
 var sseries = require('stream-series');
-
+var chalk = require('chalk');
 
 // Auto load Gulp plugins
 const plugins = gulpLoadPlugins({
@@ -16,9 +15,7 @@ const plugins = gulpLoadPlugins({
     'gulp-util': 'gulpUtil',
     'gulp-inject': 'inject',
     'gulp-htmlmin': 'htmlmin',
-    'gulp-htmltidy': 'htmltidy',
-    'gulp-gm': 'gm',
-    'gulp-imageoptim': 'imageOptim'
+    'gulp-htmltidy': 'htmltidy'
   }
 });
 
@@ -26,42 +23,46 @@ const plugins = gulpLoadPlugins({
 // Import task configuration
 var config = require('./config/config.js');
 
-
 //
-// Image processing via gulp-gm
-function imgMagic() {
-  return gulp.src('src/img_raw/*.{jpg,png}')
-    .pipe(plugins.gm( function (gmfile) {
-      return gmfile
-        .resize(1280, 1024);
-    }))
-    //.pipe(plugins.rename(config.magicRename))
-    .pipe(gulp.dest('src/img_tmp/'));
-}
-
-//
-// Responsive Images
-// Generate diiferent sized images for srcset
+// Responsive images
+// Generate different sized images for srcset
 function imgResponsive() {
-  return gulp.src('src/img_tmp/**/*.{jpg,png}')
+  process.env.VIPS_WARNING = 'disabled';
+  console.log(chalk.blue('--- Deprecation warnings related to images can be ignored. ---'));
+  
+  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png}')
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
-    .pipe(gulp.dest('src/img_responsive/'));
+    .pipe(gulp.dest('hugo/.images-temp/'));
 }
 
 //
 // Optimize responsive images and copy to final location
-function imgOptim () {
-  return gulp.src('src/img_responsive/**/*.{jpg,png}')
-    .pipe(plugins.imageOptim.optimize(config.imageoptimOptions))
-    .pipe(gulp.dest('hugo/static/images/'));
+function imgMinJpg () {
+  return gulp.src(['src/images/**/*.{jpg,jpeg,png}', 'hugo/.images-temp/**/*.{jpg,jpeg,png}'])
+    .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
+    .pipe(gulp.dest('hugo/static/images/'))
+    .pipe(plugins.count({
+      message: 'gulp-imagemin: ' + chalk.magenta('Copied') + ' ## ' + chalk.magenta('jpg/jpeg/png files.'),
+      logger: function (msg) {
+        var time = new Date().toTimeString().split(' ')[0];
+        console.log("[" + chalk.grey(time) + "] " + msg);
+      }
+    }));
 }
 
 //
 // Optimize and copy svg or gif images to final destination
-function imgMin () {
-  return gulp.src('src/img_raw/**/*.{svg,gif}')
-    .pipe(plugins.imagemin(config.imageminOptions))
-    .pipe(gulp.dest('hugo/static/images/'));
+function imgMinGif () {
+  return gulp.src(['src/images/**/*.{svg,gif}', 'hugo/static/uploads/**/*.{svg,gif}'])
+    .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
+    .pipe(gulp.dest('hugo/static/images/'))
+    .pipe(plugins.count({
+      message: 'gulp-imagemin: ' + chalk.magenta('Copied') + ' ## ' + chalk.magenta('svg/gif files.'),
+      logger: function (msg) {
+        var time = new Date().toTimeString().split(' ')[0];
+        console.log("[" + chalk.grey(time) + "] " + msg);
+      }
+    }));
 }
 
 
@@ -69,14 +70,18 @@ function imgMin () {
 // CSS processing
 function postCss () {
   return gulp.src('src/styles/*.{css,pcss}')
+    .pipe(plugins.inlinerjs())
+    .pipe(plugins.sourcemaps.init())
     .pipe(plugins.postcss(config.processors))
     .pipe(plugins.rename({extname: '.css'}))
+    .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest('hugo/static/styles/'));
 }
 
 // CSS processing, minification
 function minpostCss () {
   return gulp.src('src/styles/*.{css,pcss}')
+    .pipe(plugins.inlinerjs())
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.postcss(config.minProcessors))
     .pipe(plugins.rename({extname: '.min.css'}))
@@ -92,13 +97,13 @@ gulp.task('vendorStyles', () => {
 
 //
 // Javascript processing
-//
+
 // Linting
 // .eslintrc.json can be used by your editor (see README.md)
 // eslint rules for js aimed at browser are in config/
 let lintJs = lazypipe()
-    .pipe(plugins.eslint, 'config/eslint.json')
-    .pipe(plugins.eslint.format);
+  .pipe(plugins.eslint, 'config/eslint.json')
+  .pipe(plugins.eslint.format);
 
 // dev js tasks
 function scripts () {
@@ -115,10 +120,10 @@ function scriptsHead () {
 // Javascript minification and source mapping
 // TODO Possibly add concatenation (not really needed when served via HTTP2)
 let minJs = lazypipe()
-    .pipe(plugins.sourcemaps.init)
-      .pipe(plugins.uglify)
-      .pipe(plugins.rename, {extname: '.min.js'})
-    .pipe(plugins.sourcemaps.write, '.');
+  .pipe(plugins.sourcemaps.init)
+  .pipe(plugins.uglify)
+  .pipe(plugins.rename, {extname: '.min.js'})
+  .pipe(plugins.sourcemaps.write, '.');
 
 // stage and live js tasks
 function minscripts () {
@@ -136,7 +141,7 @@ function minscriptsHead () {
 // Read custom config and generate a custom build , already minified
 gulp.task('custoModernizr', () => {
   let exec = require('child_process').exec;
-  let cmd = './node_modules/.bin/modernizr ';
+  let cmd = __dirname + '/node_modules/.bin/modernizr ';
   cmd += '-c ./config/modernizr-config.json ';
   cmd += '-d ./hugo/static/scripts_vendor/modernizr.custom.js';
   return exec(cmd, {encoding: 'utf-8'});
@@ -149,13 +154,13 @@ gulp.task('copy', () => {
     .pipe(gulp.dest('hugo/static/'));
 });
 
-
 //
 // HTML templates
 // Copy HTML templates from src/layouts to hugo/layouts
 // We cant lint and minify here because of hugo specific code
 function html () {
   return gulp.src('src/layouts/**/*.html', { since: gulp.lastRun(html) })
+    .pipe(plugins.inlinerjs())
     .pipe(gulp.dest('hugo/layouts/'));
 }
 
@@ -169,39 +174,71 @@ function injectHead () {
 
   return gulp.src('hugo/layouts/partials/head-meta.html')
     .pipe(plugins.inject(sseries(modernizrPath, scriptsHead),
-      {selfClosingTag: true, ignorePath: 'hugo/static/', name: 'head'}))
-    .pipe(plugins.inject(sseries(vendorCss, projectCss), {ignorePath: 'hugo/static/'}))
+      {transform: transformToHugoPaths, selfClosingTag: true, ignorePath: 'hugo/static/', name: 'head'}))
+    .pipe(plugins.inject(sseries(vendorCss, projectCss), {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
     .pipe(gulp.dest('hugo/layouts/partials/'));
 }
 
 function injectFoot () {
   return gulp.src('hugo/layouts/partials/footer-scripts.html')
     .pipe(plugins.inject(gulp.src(['hugo/static/scripts/*.js'],
-      {read: false}), {ignorePath: 'hugo/static/'}))
+      {read: false}), {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
     .pipe(gulp.dest('hugo/layouts/partials/'));
 }
 
+function transformToHugoPaths(filepath) {
+  if (filepath.slice(-3) === '.js') {
+    return '<script src="{{ \"' + filepath + '\" | relURL }}"></script>';
+  }
+  if (filepath.slice(-4) === '.css') {  
+    return '<link href="{{ \"' + filepath + '\" | relURL }}" rel="stylesheet" type="text/css">';
+  }
+  // Use the default transform as fallback:
+  return inject.transform.apply(inject.transform, arguments);
+}
 
 //
 // Hugo
 // -D is buildDrafts
 // -F is buildFuture
 function hugo (status) {
-  let exec = require('child_process').execSync;
-  let cmd = 'hugo --config=hugo/config.toml -s hugo/';
+  let exec = require('child_process').exec;
+  let cmd = 'hugo --quiet --config=hugo/config.toml -s hugo/';
   if (status === 'stage') {
     cmd += ' -D -d published/stage/ --baseURL="' + config.hugoBaseUrl.stage + '"';
-    plugins.gulpUtil.log('hugo command: \n' + cmd);
+    console.log(chalk.green('hugo command: \n') + cmd + '\n');
   } else if (status === 'live') {
     cmd += ' -d published/live/ --baseURL="' + config.hugoBaseUrl.live + '"';
-    plugins.gulpUtil.log('hugo command: \n' + cmd);
+    console.log(chalk.green('hugo command: \n') + cmd + '\n');
   } else {
-    cmd += ' -DF -d published/dev/';
-    plugins.gulpUtil.log('hugo command: \n' + cmd);
+    cmd += ' -DF -d published/dev/ --baseURL="http://localhost:3000"';
+    console.log(chalk.green('hugo command: \n') + cmd + '\n');
   }
 
-  let result = exec(cmd, {encoding: 'utf-8'});
-  plugins.gulpUtil.log('hugo reports: \n' + result);
+  var child = exec(cmd, {encoding: 'utf-8'});
+
+  var promise = promiseFromChildProcess(child);
+  var output = function (data) {
+    if (data.startsWith("'hugo' is not recognized")) {
+      throw Error(data);
+    }
+    if (data.startsWith("ERROR")) {
+      console.error(chalk.red(data));
+    } else {
+      console.log(data);
+    }
+  }
+  child.stdout.on('data', output);
+  child.stderr.on('data', output);
+
+  return promise;
+}
+
+function promiseFromChildProcess(child) {
+  return new Promise(function (exit, error) {
+    child.addListener("error", error);
+    child.addListener("exit", exit);
+  });
 }
 
 gulp.task('hugoDev', () => {
@@ -215,7 +252,6 @@ gulp.task('hugoStage', () => {
 gulp.task('hugoLive', () => {
   return Promise.all([ hugo('live') ]);
 });
-
 
 //
 // HTML linting & minification
@@ -238,13 +274,6 @@ gulp.task('htmlLive', () => {
     .pipe(plugins.htmlmin(config.htmlminOptions))
     .pipe(gulp.dest('hugo/published/live/'));
 });
-
-
-//
-// Testing
-// Jasmine, Mocha...
-// TODO: what to test?
-
 
 //
 // Cleaning
@@ -278,21 +307,11 @@ function cleanLayouts (done) {
 // Clean temporary image files created during processing
 function cleanImages (done) {
   return del([
-    'src/img_tmp/**/*',
+    'hugo/.images-temp/*',
     'hugo/static/images/*',
-    'src/img_responsive/*',
     'hugo/static/images/responsive/*'
   ], done);
 }
-
-// Clean only responsive image derivatives
-function cleanResponsive (done) {
-  return del([
-    'src/img_responsive/*',
-    'hugo/static/images/responsive/*'
-  ], done);
-}
-
 
 //
 // Serve and sync
@@ -319,49 +338,53 @@ gulp.task('watcher', (done) => {
     }
   }, done());
 
+  var addWatcher = function (globs, action) {
+    var debounced = debounce(action, 100);
+    gulp.watch(globs).on('add', debounced);
+    gulp.watch(globs).on('change', debounced);
+    gulp.watch(globs).on('unlink', debounced);
+  }
+
   // Watch files for changes
-  gulp.watch('src/img_tmp').on('change', gulp.series(imgResponsive, imgOptim, imgMin, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/styles/*.{css,pcss}').on('change', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/styles/partials/*.{css,pcss}').on('change', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/styles_vendor/*.css').on('change', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/*.*').on('change', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
-  gulp.watch('config/modernizr-config.json').on('change', gulp.series('custoModernizr', injectHead, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/scripts/*.js').on('change', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/scripts_head/*.js').on('change', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
-  gulp.watch('src/layouts/**/*.html').on('change', gulp.series(html, injectHead, injectFoot, 'hugoDev', 'htmlDev', reload));
-  gulp.watch(['hugo/archetypes/*', 'hugo/content/', 'hugo/data/', 'hugo/config.*']).on('change', gulp.series('hugoDev', reload));
+  addWatcher('hugo/static/uploads/**/*', imgResponsive);
+  addWatcher(['src/images/**/*', 'hugo/.images-temp/**/*'], gulp.series(imgMinJpg, imgMinGif, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/styles/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/styles/partials/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/styles_vendor/*.css', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/*.*', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
+  addWatcher('config/modernizr-config.json', gulp.series('custoModernizr', injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts_head/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/layouts/**/*.html', gulp.series(html, injectHead, injectFoot, 'hugoDev', 'htmlDev', reload));
+  addWatcher(['hugo/archetypes/**/*', 'hugo/content/**/*', 'hugo/data/**/*', 'hugo/config.*'], gulp.series('hugoDev', reload));
 });
 
-
-//
-// Deploy
-
-// Deploy to staging
-gulp.task('upstage', () => {
-  return Promise.all([
-    rsync(config.stageRsyncOptions, function(error, stdout, stderr, cmd) {
-      plugins.gulpUtil.log('Running: ' + cmd);
-      plugins.gulpUtil.log(stdout);
-    })
-  ]);
-});
-
-// Deploy to live
-gulp.task('golive', () => {
-  return Promise.all([
-    rsync(config.liveRsyncOptions, function(error, stdout, stderr, cmd) {
-      plugins.gulpUtil.log('Running: ' + cmd);
-      plugins.gulpUtil.log(stdout);
-    })
-  ]);
-});
-
+// Debounce helper
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function () {
+		var context = this, args = arguments;
+		var later = function () {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
 //
 // 'gulp' is the main development task, essentially dev + watch + browsersync
 gulp.task('default',
-  gulp.series(
+    gulp.series(
     gulp.parallel(cleanStatic, cleanLayouts, cleanDev),
+    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
     gulp.parallel('copy', html, 'vendorStyles'),
     gulp.parallel(injectHead, injectFoot),
@@ -374,6 +397,7 @@ gulp.task('default',
 gulp.task('dev',
   gulp.series(
     gulp.parallel(cleanStatic, cleanLayouts, cleanDev),
+    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
     gulp.parallel('copy', html, 'vendorStyles'),
     gulp.parallel(injectHead, injectFoot),
@@ -385,6 +409,7 @@ gulp.task('dev',
 gulp.task('stage',
   gulp.series(
     gulp.parallel(cleanStatic, cleanLayouts, cleanStage),
+    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead),
     gulp.parallel('copy', html, 'vendorStyles'),
     gulp.parallel(injectHead, injectFoot),
@@ -396,6 +421,7 @@ gulp.task('stage',
 gulp.task('live',
   gulp.series(
     gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
+    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead),
     gulp.parallel('copy', html, 'vendorStyles'),
     gulp.parallel(injectHead, injectFoot),
@@ -404,11 +430,21 @@ gulp.task('live',
   )
 );
 
-// Clean and regenerate all images
-gulp.task('reprocess', gulp.series(cleanImages, imgMagic, imgResponsive, imgOptim, imgMin));
-// Clean and regenerate responsive images (use after modifying responsive config)
-gulp.task('reprocess:responsive', gulp.series(cleanResponsive, imgResponsive, imgOptim));
-
-
 // Task used for debugging function based task or tasks
 gulp.task('dt', gulp.series('copy'));
+
+// Same task as 'gulp live' for production only
+// Optimized a bit to parallelize image processing
+gulp.task('CircleCI-build',
+  gulp.parallel(
+    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
+    gulp.series(
+      gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
+      // gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead), -- not working right now
+      gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
+      gulp.parallel('copy', html, 'vendorStyles'),
+      gulp.parallel(injectHead, injectFoot),
+      'htmlLive'
+    )
+  )
+);

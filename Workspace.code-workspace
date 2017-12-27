@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "src"
+		},
+		{
+			"path": "hugo"
+		},
+		{
+			"path": "hugo\\themes"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 2
+	},
+}

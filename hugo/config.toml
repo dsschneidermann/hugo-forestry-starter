@@ -1,8 +1,29 @@
-# Hugo options
-# baseurls for stage and live sites are defined when calling hugo
-# from gulpfile.js default to dev url here so 'hugo new' etc still works
-baseurl = "http://localhost:3000"
+baseurl = "https://websitename.github.io/"
+canonifyurls = false
+copyright = "Open Source under the MIT license."
+disableKinds = ["RSS", "404", "taxonomyTerm", "taxonomy"]
+enableEmoji = true
+googleAnalytics = ""
 languageCode = "en-us"
-title = "My New Hugo Site"
-
-#disableKinds = ['RSS']
+paginate = 10
+relativeurls = false
+theme = "startbootstrap-clean-blog"
+title = "Website Title"
+[author]
+name = ""
+[[menu.main]]
+identifier = "home"
+name = "Home"
+url = "/"
+weight = 1
+[params]
+dateform = "Mon, Jan 2, 2006"
+description = ""
+email = "...@users.noreply.github.com"
+image = ""
+[[params.social]]
+title = "facebook"
+url = "https://www.facebook.com/FACEBOOKHANDLE"
+[taxonomies]
+category = "categories"
+tag = "tags"

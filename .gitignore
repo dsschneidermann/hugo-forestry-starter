@@ -5,15 +5,17 @@ node_modules
 bower_components
 
 # tmp files
-img_tmp
-img_responsive
+hugo/.images-temp
 .cache-*
 
 # Hugo
-published
-public
-static
+hugo/public
+hugo/published
 hugo/layouts
+# Everything static is rebuilt except the uploads dir
+!hugo/static
+hugo/static/*
+!hugo/static/uploads
 
 # OSX
 .DS_Store
