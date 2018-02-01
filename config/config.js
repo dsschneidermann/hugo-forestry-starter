@@ -40,6 +40,7 @@ module.exports = {
     withMetadata: false,
     withoutEnlargement: false,
     errorOnEnlargement: false,
+    errorOnUnusedConfig: false,
   },
 
   //
