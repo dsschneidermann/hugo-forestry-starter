@@ -9,7 +9,7 @@ jobs:
 
     environment:
       # Set the email address to use when commiting to repository
-      - OWNER_EMAIL: 
+      - OWNER_EMAIL: webmaster@roestkbh.dk
       
     working_directory: ~/repo
 

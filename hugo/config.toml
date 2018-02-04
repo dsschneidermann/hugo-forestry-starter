@@ -1,4 +1,4 @@
-baseurl = "https://websitename.github.io/"
+baseurl = "https://roestkbh-web.github.io/"
 canonifyurls = false
 copyright = "Open Source under the MIT license."
 disableKinds = ["RSS", "404", "taxonomyTerm", "taxonomy"]
@@ -19,7 +19,7 @@ weight = 1
 [params]
 dateform = "Mon, Jan 2, 2006"
 description = ""
-email = "...@users.noreply.github.com"
+email = "kontakt@roestkbh.dk"
 image = ""
 [[params.social]]
 title = "facebook"
