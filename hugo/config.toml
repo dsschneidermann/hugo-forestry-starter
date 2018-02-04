@@ -20,7 +20,7 @@ weight = 1
 dateform = "Mon, Jan 2, 2006"
 description = ""
 email = "...@users.noreply.github.com"
-image = ""
+image = "/uploads/2018/01/01/unsplash-garrett-parker-247225.jpg"
 [[params.social]]
 title = "facebook"
 url = "https://www.facebook.com/FACEBOOKHANDLE"
