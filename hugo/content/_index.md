@@ -1,7 +1,7 @@
 ---
 title: Home
 type: page
-image: "/uploads/2018/01/11/orange-flower-3.jpg"
+image: ""
 subtitle: pop du næsten kender
 
 ---

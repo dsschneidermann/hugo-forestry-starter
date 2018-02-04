@@ -8,22 +8,22 @@ languageCode = "en-us"
 paginate = 10
 relativeurls = false
 theme = "startbootstrap-clean-blog"
-title = "Website Title"
+title = "Røst"
 [author]
-name = ""
+name = "Røst"
 [[menu.main]]
 identifier = "home"
-name = "Home"
+name = "Forside"
 url = "/"
 weight = 1
 [params]
 dateform = "Mon, Jan 2, 2006"
 description = ""
 email = "kontakt@roestkbh.dk"
-image = ""
+image = "/uploads/2018/01/09/DSC_0027.jpg"
 [[params.social]]
 title = "facebook"
-url = "https://www.facebook.com/FACEBOOKHANDLE"
+url = "https://www.facebook.com/roestcph"
 [taxonomies]
 category = "categories"
 tag = "tags"
