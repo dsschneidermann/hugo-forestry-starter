@@ -30,7 +30,8 @@ function imgResponsive() {
   process.env.VIPS_WARNING = 'disabled';
   console.log(chalk.blue('--- Deprecation warnings related to images can be ignored. ---'));
   
-  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png}')
+  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}')
+    .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
     .pipe(gulp.dest('hugo/.images-temp/'));
 }
@@ -38,7 +39,8 @@ function imgResponsive() {
 //
 // Optimize responsive images and copy to final location
 function imgMinJpg () {
-  return gulp.src(['src/images/**/*.{jpg,jpeg,png}', 'hugo/.images-temp/**/*.{jpg,jpeg,png}'])
+  return gulp.src(['src/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}', 'hugo/.images-temp/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}'])
+    .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
     .pipe(plugins.count({
@@ -53,7 +55,8 @@ function imgMinJpg () {
 //
 // Optimize and copy svg or gif images to final destination
 function imgMinGif () {
-  return gulp.src(['src/images/**/*.{svg,gif}', 'hugo/static/uploads/**/*.{svg,gif}'])
+  return gulp.src(['src/images/**/*.{svg,gif,SVG,GIF}', 'hugo/static/uploads/**/*.{svg,gif,SVG,GIF}'])
+    .pipe(plugins.rename(makeLowerCaseExt))  
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
     .pipe(plugins.count({
@@ -63,6 +66,11 @@ function imgMinGif () {
         console.log("[" + chalk.grey(time) + "] " + msg);
       }
     }));
+}
+
+// Image output generation can be iffy unless lowercase extensions are used..
+function makeLowerCaseExt (path) {
+    path.extname = path.extname.toLowerCase();
 }
 
 
