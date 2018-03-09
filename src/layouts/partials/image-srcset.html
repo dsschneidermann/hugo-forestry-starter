@@ -4,6 +4,7 @@
 
 {{ if hasPrefix $path "/uploads/" }}
   {{ $ext := index (findRE "\\.[^\\.]*$" $path 1) 0 }}
+  {{ $extLower := $ext | lower }}
   {{ $filename := ($path | strings.TrimPrefix "/uploads/") | strings.TrimSuffix $ext }}
 
   {{/* formatStr is ('/images/') filename ('-') size ('x') extension, */}}
@@ -11,11 +12,11 @@
 
   {{/* Defines the widths to output, the first is fallback size */}}
   {{ $set := slice "1280" "320" "640" "1920" }}
-  {{ $fallback := (printf $formatStr $filename (index $set 0) $ext) }}
+  {{ $fallback := (printf $formatStr $filename (index $set 0) $extLower) }}
 
   {{ if fileExists (print "/static/" $fallback) }}
     <img src="{{ $fallback | relURL }}"
-      srcset="{{ range $set }}{{ (printf $formatStr $filename . $ext) | relURL }} {{ string . }}w, {{ end }}"
+      srcset="{{ range $set }}{{ (printf $formatStr $filename . $extLower) | relURL }} {{ string . }}w, {{ end }}"
       sizes="100vw">
   {{ else }}
     <img src="{{ $path | relURL }}">
