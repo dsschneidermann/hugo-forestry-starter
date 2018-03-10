@@ -42,7 +42,7 @@
                   <h3 class="text-center invert">Røst</h3>
                   <ul class="instagram-widget-btn-top list-inline text-center">
                     <li>
-                    <a class="btn btn-primary" href="{{ .Site.Params.instagramLink }}" target="_blank">
+                    <a class="btn btn-primary" href="{{ .Site.Params.instagramLink | safeURL }}" target="_blank">
                       <span class="fa fa-lg fa-instagram">&nbsp;</span><span class="callout">{{ .Site.Params.instagramCallout }}</span>
                     </a></li>
                   </ul>
@@ -51,7 +51,7 @@
                   </div>
                   <ul class="instagram-widget-btn-bottom list-inline text-center">
                     <li>
-                    <a class="btn btn-primary" href="{{ .Site.Params.instagramLink }}" target="_blank">
+                    <a class="btn btn-primary" href="{{ .Site.Params.instagramLink | safeURL }}" target="_blank">
                       <span class="fa fa-lg fa-instagram">&nbsp;</span><span class="callout">{{ .Site.Params.instagramCallout }}</span>
                     </a></li>
                   </ul>
