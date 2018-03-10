@@ -4,5 +4,5 @@ type: ""
 subtitle: ""
 image: ""
 imageTint: 0
-imageTintColor: ""
+imageTintGradient: ""
 ---

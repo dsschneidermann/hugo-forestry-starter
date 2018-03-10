@@ -24,8 +24,8 @@ fields:
     min: '0'
     max: '100'
 - type: text
-  name: imageTintColor
-  label: Image Tint Color
+  name: imageTintGradient
+  label: Image Tint Gradient
 - name: type
   label: Type
   type: text

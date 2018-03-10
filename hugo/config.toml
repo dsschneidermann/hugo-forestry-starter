@@ -21,6 +21,7 @@ dateform = "Mon, Jan 2, 2006"
 description = ""
 email = "kontakt@roestkbh.dk"
 image = "/uploads/2018/01/09/DSC_0027.jpg"
+imageTintGradient = "#000, #0004 25%, #0004 75%, #151515"
 instagramCallout = "Tjek vores Instagram"
 instagramLink = "https://www.instagram.com/roestcph/"
 [[params.social]]
