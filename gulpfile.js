@@ -117,11 +117,13 @@ let lintJs = lazypipe()
 function scripts () {
   return gulp.src('src/scripts/*.js', { since: gulp.lastRun(scripts) })
     .pipe(lintJs())
+    .pipe(plugins.inlinerjs())
     .pipe(gulp.dest('hugo/static/scripts/'));
 }
 function scriptsHead () {
   return gulp.src('src/scripts_head/*.js', { since: gulp.lastRun(scriptsHead) })
     .pipe(lintJs())
+    .pipe(plugins.inlinerjs())
     .pipe(gulp.dest('hugo/static/scripts_head/'));
 }
 
@@ -361,8 +363,8 @@ gulp.task('watcher', (done) => {
   addWatcher('src/styles_vendor/*.css', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/*.*', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
   addWatcher('config/modernizr-config.json', gulp.series('custoModernizr', injectHead, 'hugoDev', 'htmlDev', reload));
-  addWatcher('src/scripts/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
-  addWatcher('src/scripts_head/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts/**/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts_head/**/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/layouts/**/*.html', gulp.series(html, injectHead, injectFoot, 'hugoDev', 'htmlDev', reload));
   addWatcher(['hugo/archetypes/**/*', 'hugo/content/**/*', 'hugo/data/**/*', 'hugo/config.*'], gulp.series('hugoDev', reload));
 });

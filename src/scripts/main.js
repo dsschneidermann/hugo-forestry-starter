@@ -1,6 +1,6 @@
-// main.js
+let initFunctions = [];
 
-(function () {
+initFunctions.push(function () {
   class ResponsiveBackgroundImage {
     constructor(element) {
       this.element = element;
@@ -29,4 +29,26 @@
   for (let i = 0; i < elements.length; i++) {
     new ResponsiveBackgroundImage(elements[i]);
   }
-})();
+});
+
+initFunctions.push(function() {
+  // Add no-hover to anchors that contain an image
+  let elements = document.querySelectorAll('a > img');
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].parentNode.classList.add('no-hover');
+  }
+});
+
+let init = function() {
+  for (let i = 0; i < initFunctions.length; i++) {
+    initFunctions[i]();
+  }
+};
+
+// Load page transition
+/* $inline.line("./transitions/fadeTransition.js"); */
+
+// Document Ready for first init
+document.addEventListener('DOMContentLoaded', function() { 
+  init();
+});
