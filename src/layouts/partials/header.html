@@ -25,8 +25,13 @@
 </nav>
 
 <!-- Page Header -->
-<!-- <header class="intro-header" style="background-image: url('/uploads/2018/01/09/DSC_0027.jpg')"> -->
 <header data-responsive-background-image class="intro-header" style="width: 100%;">
+  {{ if not (.Params.imageTint | default "" | eq "") }}
+    {{ $overlayColor := .Params.imageTintColor | default "black" }}
+    {{ $overlayBackground := printf "linear-gradient(%s, %s)" $overlayColor $overlayColor }}
+    {{ $overlayOpacity := div .Params.imageTint 100.0 }}
+    <div class="intro-header-overlay" style="background: {{ $overlayBackground | safeCSS }}; opacity: {{ $overlayOpacity | safeCSS }}"></div>
+  {{ end }}
   {{ if not (.Params.image | default "" | eq "") }}
     {{ partial "image-srcset" .Params.image }}
   {{ else if not (.Site.Params.image | default "" | eq "") }}
