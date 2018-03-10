@@ -26,10 +26,12 @@
 
 <!-- Page Header -->
 <header data-responsive-background-image class="intro-header" style="width: 100%;">
-  {{ if not (.Params.imageTint | default "" | eq "") }}
+  {{ if (not (.Params.imageTint | default 0 | eq 0)) | or (not (.Params.imageTintColor | default "" | eq "")) }}
+    {{ $overlayTint := .Params.imageTint | default 100.0}}
+    {{ $overlayOpacity := div $overlayTint 100.0 }}
     {{ $overlayColor := .Params.imageTintColor | default "black" }}
-    {{ $overlayBackground := printf "linear-gradient(%s, %s)" $overlayColor $overlayColor }}
-    {{ $overlayOpacity := div .Params.imageTint 100.0 }}
+    {{ $overlayLinearGradient := cond (in $overlayColor ",") $overlayColor (printf "%s,%s" $overlayColor $overlayColor) }}
+    {{ $overlayBackground := printf "linear-gradient(%s)" $overlayLinearGradient }}
     <div class="intro-header-overlay" style="background: {{ $overlayBackground | safeCSS }}; opacity: {{ $overlayOpacity | safeCSS }}"></div>
   {{ end }}
   {{ if not (.Params.image | default "" | eq "") }}
