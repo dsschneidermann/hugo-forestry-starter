@@ -23,7 +23,10 @@
 
 // Place any jQuery/helper plugins in here.
 
-// Add no-hover to anchors that contain an image
-$('a > img').each(function() {
-  $(this).parent().addClass('no-hover');
-});
+(function() {
+  // Add no-hover to anchors that contain an image
+  let elements = document.querySelectorAll('a > img');
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].parentNode.classList.add('no-hover');
+  }
+}());
