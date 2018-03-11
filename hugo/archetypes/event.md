@@ -4,4 +4,5 @@ endDate: ""
 title: ""
 description: ""
 image: ""
+eventLink: ""
 ---

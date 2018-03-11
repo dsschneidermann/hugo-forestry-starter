@@ -16,21 +16,16 @@
 <!-- Post Content -->
 <div class="main-content">
   <div class="container">
-      {{ range .Data.Pages.Reverse }}
-        {{ $now := now.Format "2006-01-02" }}    
-        {{ $start := .Date.Format "2006-01-02"  }}
-        
-        {{ if .Params.endDate }}
-          {{ $end := dateFormat "2006-01-02" .Params.endDate  }}
-      
-          {{ if or (ge $start $now) (ge $end $now)}}
-              {{ partial "event-card.html" . }}
-          {{ end }}
-          
-        {{ else if ge $start $now }}
-            {{ partial "event-card.html" . }}                        
-        {{ end }}
-      {{ end }}
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-1 col-sm-8 col-sm-offset-1">
+        {{ .Content }}
+      </div>
+    </div>
+    <p></p>
+    {{ $events := where .Site.Pages.ByDate "Section" "events" }}
+    {{ range where $events "Date" "ge" (now.AddDate 0 0 -1) }}
+      {{ partial "event-card.html" . }}
+    {{end}}
   </div>
 </div>
 </div>

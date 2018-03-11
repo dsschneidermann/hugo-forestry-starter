@@ -26,6 +26,11 @@ fields:
   type: file
   hidden: false
   default: ''
+- name: eventLink
+  label: Event Link
+  type: text
+  hidden: false
+  default: ''
 - name: type
   label: Type
   type: text
