@@ -31,11 +31,11 @@
       <div class="container">
           <div class="row">
               <div class="col-lg-6 col-lg-offset-1 col-md-10 col-md-offset-1">
-                {{ if .Params.rendertoc }}
-                {{ .TableOfContents }}
-                {{ end }}
                 {{ .Content }}
-                {{ partial "comments.html" .}}
+                {{ $events := where .Site.Pages.ByDate "Section" "events" }}
+                {{ range where $events "Date" "ge" (now.AddDate 0 0 -1) | first 1 }}
+                  {{ partial "event-card.html" . }}
+                {{end}}
               </div>
               <div class="col-lg-4 lg-nopadding col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
                 <div class="instagram-widget">

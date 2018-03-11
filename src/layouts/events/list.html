@@ -16,18 +16,23 @@
 <!-- Post Content -->
 <div class="main-content">
   <div class="container">
-      <div class="row">
-          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            {{ .Content }}
-            <ul>
-              {{ range .Data.Pages }}
-              <li><a href="{{ .Permalink | relURL }}">{{ .Title }}</a></li>
-              {{ end }}
-            </ul>
-          </div>
-        </div>
-    </div>
+      {{ range .Data.Pages.Reverse }}
+        {{ $now := now.Format "2006-01-02" }}    
+        {{ $start := .Date.Format "2006-01-02"  }}
+        
+        {{ if .Params.endDate }}
+          {{ $end := dateFormat "2006-01-02" .Params.endDate  }}
+      
+          {{ if or (ge $start $now) (ge $end $now)}}
+              {{ partial "event-card.html" . }}
+          {{ end }}
+          
+        {{ else if ge $start $now }}
+            {{ partial "event-card.html" . }}                        
+        {{ end }}
+      {{ end }}
   </div>
+</div>
 </div>
 </div>
 

@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-lg-4 col-lg-offset-2 col-sm-5 col-sm-offset-1 col-xs-12">
+        <a href="{{ .Permalink | relURL }}">
+            <div data-responsive-background-image class="event-card-image" style="height: 200px; ">
+                {{ if not (.Params.image | default "" | eq "") }}
+                    {{ partial "image-srcset" (dict "path" .Params.image "sizes" "25vw, (max-width: 768px) 100vw") }}
+                {{ end }}
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-6 col-sm-5 col-xs-12">
+        {{ .Title }}
+        <div style="float: right;">
+            <!-- $inline.line("./share-buttons/share-buttons.html"); -->
+        </div>
+        <br>
+        {{ .Date.Format "02/01 2006" }}
+        <br><br>
+        {{ .Description }}
+    </div>
+</div>
