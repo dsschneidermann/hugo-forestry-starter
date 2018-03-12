@@ -1,7 +1,8 @@
 <!doctype html>
 <html class="no-js" lang="{{ .Site.LanguageCode }}">
-<head>
-  {{ partial "head-meta.html" . }}
+{{ $eventsIndexPage := .Site.GetPage "section" "events" }}
+  <head>
+  {{ partial "head-meta.html" $eventsIndexPage }}
 </head>
 <body>
   <!--[if lte IE 9]>
@@ -11,30 +12,27 @@
 <div id="barba-wrapper">
 <div class="barba-container">
 
-{{ partial "header.html" . }}
+{{ partial "header.html" $eventsIndexPage }}
 
 <!-- Post Content -->
 <div class="main-content">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-1 col-sm-8 col-sm-offset-1">
-        {{ .Content }}
+        {{ $eventsIndexPage.Content }}
       </div>
     </div>
     <br>
-    {{ $events := where .Site.Pages.ByDate "Section" "events" }}
-    {{ range where $events "Date" "ge" (now.AddDate 0 0 -1) }}
-      {{ partial "event-card.html" . }}<br>
-    {{end}}
+    {{ partial "event-card.html" . }}
   </div>
 </div>
 
 </div>
 </div>
 
-{{ partial "footer.html" . }}
+{{ partial "footer.html" $eventsIndexPage }}
 
-{{ partial "footer-scripts.html" . }}
+{{ partial "footer-scripts.html" $eventsIndexPage }}
 
 </body>
 </html>
