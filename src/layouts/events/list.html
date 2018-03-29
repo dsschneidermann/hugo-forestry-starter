@@ -14,19 +14,20 @@
 {{ partial "header.html" . }}
 
 <!-- Post Content -->
-<article>
+<div class="main-content">
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        {{ if .Params.rendertoc }}
-        {{ .TableOfContents }}
-        {{ end }}
+      <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-1 col-sm-8 col-sm-offset-1">
         {{ .Content }}
-        {{ partial "comments.html" .}}
       </div>
     </div>
+    <br>
+    {{ $events := where .Site.Pages.ByDate "Section" "events" }}
+    {{ range where $events "Date" "ge" (now.AddDate 0 0 -1) }}
+      {{ partial "event-card.html" . }}<br>
+    {{end}}
   </div>
-</article>
+</div>
 
 </div>
 </div>

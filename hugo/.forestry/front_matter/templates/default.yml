@@ -17,6 +17,15 @@ fields:
   type: file
   hidden: false
   default: ''
+- type: number
+  name: imageTint
+  label: Image Tint
+  config:
+    min: '0'
+    max: '100'
+- type: text
+  name: imageTintGradient
+  label: Image Tint Gradient
 - name: type
   label: Type
   type: text
