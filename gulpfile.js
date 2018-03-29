@@ -30,7 +30,8 @@ function imgResponsive() {
   process.env.VIPS_WARNING = 'disabled';
   console.log(chalk.blue('--- Deprecation warnings related to images can be ignored. ---'));
   
-  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png}')
+  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}')
+    .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
     .pipe(gulp.dest('hugo/.images-temp/'));
 }
@@ -38,7 +39,8 @@ function imgResponsive() {
 //
 // Optimize responsive images and copy to final location
 function imgMinJpg () {
-  return gulp.src(['src/images/**/*.{jpg,jpeg,png}', 'hugo/.images-temp/**/*.{jpg,jpeg,png}'])
+  return gulp.src(['src/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}', 'hugo/.images-temp/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}'])
+    .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
     .pipe(plugins.count({
@@ -53,7 +55,8 @@ function imgMinJpg () {
 //
 // Optimize and copy svg or gif images to final destination
 function imgMinGif () {
-  return gulp.src(['src/images/**/*.{svg,gif}', 'hugo/static/uploads/**/*.{svg,gif}'])
+  return gulp.src(['src/images/**/*.{svg,gif,SVG,GIF}', 'hugo/static/uploads/**/*.{svg,gif,SVG,GIF}'])
+    .pipe(plugins.rename(makeLowerCaseExt))  
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
     .pipe(plugins.count({
@@ -63,6 +66,11 @@ function imgMinGif () {
         console.log("[" + chalk.grey(time) + "] " + msg);
       }
     }));
+}
+
+// Image output generation can be iffy unless lowercase extensions are used..
+function makeLowerCaseExt (path) {
+    path.extname = path.extname.toLowerCase();
 }
 
 
@@ -109,11 +117,13 @@ let lintJs = lazypipe()
 function scripts () {
   return gulp.src('src/scripts/*.js', { since: gulp.lastRun(scripts) })
     .pipe(lintJs())
+    .pipe(plugins.inlinerjs())
     .pipe(gulp.dest('hugo/static/scripts/'));
 }
 function scriptsHead () {
   return gulp.src('src/scripts_head/*.js', { since: gulp.lastRun(scriptsHead) })
     .pipe(lintJs())
+    .pipe(plugins.inlinerjs())
     .pipe(gulp.dest('hugo/static/scripts_head/'));
 }
 
@@ -353,8 +363,8 @@ gulp.task('watcher', (done) => {
   addWatcher('src/styles_vendor/*.css', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/*.*', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
   addWatcher('config/modernizr-config.json', gulp.series('custoModernizr', injectHead, 'hugoDev', 'htmlDev', reload));
-  addWatcher('src/scripts/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
-  addWatcher('src/scripts_head/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts/**/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/scripts_head/**/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/layouts/**/*.html', gulp.series(html, injectHead, injectFoot, 'hugoDev', 'htmlDev', reload));
   addWatcher(['hugo/archetypes/**/*', 'hugo/content/**/*', 'hugo/data/**/*', 'hugo/config.*'], gulp.series('hugoDev', reload));
 });

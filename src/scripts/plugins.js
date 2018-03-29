@@ -19,11 +19,4 @@
       console[method] = noop;
     }
   }
-}());
-
-// Place any jQuery/helper plugins in here.
-
-// Add no-hover to anchors that contain an image
-$('a > img').each(function() {
-  $(this).parent().addClass('no-hover');
-});
+})();
