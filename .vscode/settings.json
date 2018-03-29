@@ -3,5 +3,21 @@
         "**/.git": true,
         "**/.DS_Store": true,
         "**/node_modules": true,
+    },
+    "editor.tabSize": 4,
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+      "editor.tabSize": 2
+    },
+    "[scss]": {
+      "editor.tabSize": 2
+    },
+    "[css]": {
+      "editor.tabSize": 2
+    },
+    "[html]": {
+      "editor.tabSize": 2
     }
 }

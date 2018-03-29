@@ -1,0 +1,62 @@
+@import "partials/vars.pcss";
+
+.instagram-widget {
+  background: color(var(--white) a(98%));
+  padding: 10px;
+  & p {
+    margin: 10px 0;
+  }
+  & h3 {
+    color: color(var(--background));
+  }
+  & ul.instagram-widget-btn-top {
+    margin: 15px 0 25px 0;
+  }
+  & ul.instagram-widget-btn-bottom {
+    margin: 15px 0 10px 0;
+    display: none;
+  }
+  & .logo {
+    width: 60%;
+    max-width: 100px;
+    border: 1px solid #dbdbdb;
+  }
+  & .fa-lg {
+    line-height: 1.5em;
+  }
+  & .callout {
+    line-height: 1.5em;
+    font-size: 1.2em;
+    vertical-align: middle;
+    font-weight: 700;
+  }
+  & .btn {
+    text-transform: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  & a {
+    text-decoration: none;
+  }
+}
+
+/*
+// Responsive large display
+*/
+
+@media only screen and (min-width: 1200px) {
+  .instagram-widget {
+    & p {
+      margin-bottom: 20px;
+    }
+    & h3 {
+      display: none;
+    }
+    & ul.instagram-widget-btn-bottom {
+      display: block;
+    }
+    & ul.instagram-widget-btn-top {
+      display: none;
+    }
+  }
+}
