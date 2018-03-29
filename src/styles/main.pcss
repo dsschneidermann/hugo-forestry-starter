@@ -296,7 +296,8 @@ a img {
 }
 
 @media only screen and (min-width: 768px) {
-  .navbar-custom .nav li a:hover, .navbar-custom .nav li a:focus {
+  .navbar-custom .nav li a:hover, .navbar-custom .nav li a:focus,
+  .navbar-custom.is-fixed .nav li a:hover, .navbar-custom .nav li a:focus {
     color: color(var(--menulinkhover) a(.8));
   }
 }
@@ -332,7 +333,8 @@ a img {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-  .navbar-custom.is-fixed .nav li a {
+  .navbar-custom .nav li a,
+  .navbar-custom.isfixed .nav li a {
     color: color(var(--menulink));
   }
 }

@@ -1,4 +1,5 @@
-{{ $path := . }}
+{{ $path := .path }}
+{{ $sizes := .sizes }}
 
 {{/* --- Create img with srcset that matches processed images from the uploads folder --- */}}
 
@@ -17,7 +18,7 @@
   {{ if fileExists (print "/static/" $fallback) }}
     <img src="{{ $fallback | relURL }}"
       srcset="{{ range $set }}{{ (printf $formatStr $filename . $extLower) | relURL }} {{ string . }}w, {{ end }}"
-      sizes="100vw">
+      sizes="{{ $sizes }}">
   {{ else }}
     <img src="{{ $path | relURL }}">
   {{ end }}

@@ -25,12 +25,11 @@
 </nav>
 
 <!-- Page Header -->
-<!-- <header class="intro-header" style="background-image: url('/uploads/2018/01/09/DSC_0027.jpg')"> -->
 <header data-responsive-background-image class="intro-header" style="width: 100%;">
   {{ if not (.Params.image | default "" | eq "") }}
-    {{ partial "image-srcset" .Params.image }}
+    {{ partial "image-srcset" (dict "path" .Params.image "sizes" "100vw" ) }}
   {{ else if not (.Site.Params.image | default "" | eq "") }}
-    {{ partial "image-srcset" .Site.Params.image }}
+    {{ partial "image-srcset" (dict "path" .Site.Params.image "sizes" "100vw" ) }}
   {{ end }}
   <div class="container">
     <div class="row">

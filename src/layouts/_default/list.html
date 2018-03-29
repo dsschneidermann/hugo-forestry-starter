@@ -8,19 +8,29 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
 
-  {{ partial "header.html" . }}
+<div id="barba-wrapper">
+<div class="barba-container">
 
-  <div class="main-content">
+{{ partial "header.html" . }}
 
-    <h1>{{ .Title }}</h1>
-
-    <ul>
-      {{ range .Data.Pages }}
-      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-      {{ end }}
-    </ul>
-
+<!-- Post Content -->
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        {{ .Content }}
+        <ul>
+          {{ range .Data.Pages }}
+        <li><a href="{{ .Permalink | relURL }}">{{ .Title }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
   </div>
+</div>
+
+</div>
+</div>
 
 {{ partial "footer.html" . }}
 
