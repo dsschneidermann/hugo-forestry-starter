@@ -14,58 +14,59 @@
   </style>  
 </head>
 <body>
-    <!--[if lte IE 9]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-    <![endif]-->
+  <!--[if lte IE 9]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
 
-  <div class="preloader">
-    <div class="loader-image-anim"></div>
-  </div>
-  
-  <div id="barba-wrapper">
-  <div class="barba-container">
+<div class="preloader">
+  <div class="loader-image-anim"></div>
+</div>
 
-  {{ partial "header.html" . }}
+<div id="barba-wrapper">
+<div class="barba-container">
 
-  <article>
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-6 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {{ if .Params.rendertoc }}
-                {{ .TableOfContents }}
-                {{ end }}
-                {{ .Content }}
-                {{ partial "comments.html" .}}
-              </div>
-              <div class="col-lg-2 lg-nopadding col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
-                <div class="instagram-widget">
-                  <p class="text-center">
-                    <img class="img-circle logo" src="https://scontent-sjc3-1.cdninstagram.com/t51.2885-19/s150x150/18444127_1925636914373421_3223144175625043968_a.jpg" alt="Røst">
-                  </p>
-                  <h3 class="text-center invert">Røst</h3>
-                  <ul class="list-inline text-center">
-                    <li>
-                    <a class="btn btn-primary" href="https://www.instagram.com/roestcph/" target="_blank">
-                        <span class="fa fa-lg fa-instagram">&nbsp;Følg os</span>
-                    </a></li>
-                  </ul>
-                <!-- LightWidget WIDGET --><script src="//lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/98d4fd1ece6a5b2bbecac2aa6b329a81.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
-              </div>
+{{ partial "header.html" . }}
+
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-2 col-md-10 col-md-offset-1">
+              {{ if .Params.rendertoc }}
+              {{ .TableOfContents }}
+              {{ end }}
+              {{ .Content }}
+              {{ partial "comments.html" .}}
+            </div>
+            <div class="col-lg-2 lg-nopadding col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+              <div class="instagram-widget">
+                <p class="text-center">
+                  <img class="img-circle logo" src="https://scontent-sjc3-1.cdninstagram.com/t51.2885-19/s150x150/18444127_1925636914373421_3223144175625043968_a.jpg" alt="Røst">
+                </p>
+                <h3 class="text-center invert">Røst</h3>
+                <ul class="list-inline text-center">
+                  <li>
+                  <a class="btn btn-primary" href="https://www.instagram.com/roestcph/" target="_blank">
+                      <span class="fa fa-lg fa-instagram">&nbsp;Følg os</span>
+                  </a></li>
+                </ul>
+              <!-- LightWidget WIDGET --><script src="//lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/98d4fd1ece6a5b2bbecac2aa6b329a81.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
             </div>
           </div>
-      </div>
-  </article>
-  </div>
-  </div>
-  
-  {{ partial "footer.html" . }}
+        </div>
+    </div>
+</article>
 
-  {{ partial "footer-scripts.html" . }}
+{{ partial "footer.html" . }}
 
-  <!-- Inlined javascript for preloader -->
-  <script type="text/javascript">
-    /* $inline.line("../scripts/preloader/preloader.js"); */
-  </script>
+</div>
+</div>
+
+{{ partial "footer-scripts.html" . }}
+
+<!-- Inlined javascript for preloader -->
+<script type="text/javascript">
+  /* $inline.line("../scripts/preloader/preloader.js"); */
+</script>
 
 </body>
 </html>

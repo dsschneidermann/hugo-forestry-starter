@@ -26,6 +26,7 @@ var FadeTransition = Barba.BaseTransition.extend({
      * At this stage newContainer is on the DOM (inside our #barba-container and with visibility: hidden)
      * Please note, newContainer is available just after newContainerLoading is resolved!
      */
+    window.scrollTo(0,0);
 
     var _this = this;
     var $el = $(this.newContainer);

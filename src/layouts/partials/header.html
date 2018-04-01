@@ -10,14 +10,20 @@
                 <div class="icon-bar"></div>
                 <div class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ .Site.BaseURL | absURL }}">
-              <div class="hidden-sm hidden-md hidden-lg hidden-xlg">
-                {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
-              </div>
-              <div class="hidden-xs">
-                {{ partial "image-prepared-2x" "/images/navbar-logo-neg.png" }}
-              </div>
-            </a>
+            {{ if (fileExists "/images/navbar-logo.png") }}
+              <a class="navbar-brand" href="{{ .Site.BaseURL | absURL }}">
+                <div class="hidden-sm hidden-md hidden-lg hidden-xlg"> -->
+                  {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
+                </div>
+                <div class="hidden-xs">
+                  {{ if (fileExists "/images/navbar-logo-neg.png") }}
+                    {{ partial "image-prepared-2x" "/images/navbar-logo-neg.png" }}
+                  {{ else }}
+                    {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
+                  {{ end }}
+                </div>
+              </a>
+            {{ end }}
         </div>
 
         {{ partial "navbar.html" . }}
