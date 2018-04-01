@@ -12,8 +12,8 @@
 {{ $imageDoublePath := (printf $formatStr $filename $doubleSize $ext)}}
 
 {{/* Make sure both images can be found */}} 
-{{ $image := imageConfig (print "static" $imagePath) }}
-{{ $imageDouble := imageConfig (print "static" $imageDoublePath) }}
+{{ $image := imageConfig (print "/static/" $imagePath) }}
+{{ $imageDouble := imageConfig (print "/static/" $imageDoublePath) }}
 
 <img src="{{ $imagePath | relURL }}"
   width="{{ $image.Width }}px"
