@@ -160,7 +160,7 @@ gulp.task('custoModernizr', () => {
 //
 // Copy other assets like icons and txt files from src to hugo/static
 gulp.task('copy', () => {
-  return gulp.src('src/*.*', { since: gulp.lastRun('copy') })
+  return gulp.src('src/*', { since: gulp.lastRun('copy') })
     .pipe(gulp.dest('hugo/static/'));
 });
 
@@ -361,7 +361,7 @@ gulp.task('watcher', (done) => {
   addWatcher('src/styles/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/styles/partials/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/styles_vendor/*.css', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
-  addWatcher('src/*.*', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
+  addWatcher('src/*', gulp.series('copy', 'hugoDev', 'htmlDev', reload));
   addWatcher('config/modernizr-config.json', gulp.series('custoModernizr', injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/scripts/**/*.js', gulp.series(scripts, injectFoot, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/scripts_head/**/*.js', gulp.series(scriptsHead, injectHead, 'hugoDev', 'htmlDev', reload));
