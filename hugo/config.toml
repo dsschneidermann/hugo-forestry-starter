@@ -1,7 +1,7 @@
 baseurl = "https://websitename.github.io/"
 canonifyurls = false
 copyright = "Open Source under the MIT license."
-disableKinds = ["RSS", "404", "taxonomyTerm", "taxonomy"]
+disableKinds = ["404", "taxonomyTerm", "taxonomy"]
 enableEmoji = true
 googleAnalytics = ""
 languageCode = "en-us"

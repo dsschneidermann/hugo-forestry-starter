@@ -8,6 +8,8 @@ var lazypipe = require('lazypipe');
 var browserSync = require('browser-sync').create();
 var sseries = require('stream-series');
 var chalk = require('chalk');
+var crypto = require('crypto');
+var fs = require('fs');
 
 // Auto load Gulp plugins
 const plugins = gulpLoadPlugins({
@@ -22,15 +24,35 @@ const plugins = gulpLoadPlugins({
 //
 // Import task configuration
 var config = require('./config/config.js');
+var dependencies = require('./config/dependencies.js');
+
+//
+// Copy dependencies
+function copyDependenciesCss () {
+  if (dependencies.css.length == 0)
+    return gulp.src('.');
+  return gulp.src(dependencies.css)
+    .pipe(gulp.dest('hugo/static/styles_vendor/'));
+}
+function copyDependenciesJsHead () {
+  if (dependencies.jsHead.length == 0)
+    return gulp.src('.');
+  return gulp.src(dependencies.jsHead)
+  .pipe(gulp.dest('hugo/static/scripts_head/'));
+}
+function copyDependenciesJsFooter () {
+  if (dependencies.jsFooter.length == 0)
+    return gulp.src('.');
+  return gulp.src(dependencies.jsFooter)
+    .pipe(gulp.dest('hugo/static/scripts/'));
+}
 
 //
 // Responsive images
 // Generate different sized images for srcset
 function imgResponsive() {
-  process.env.VIPS_WARNING = 'disabled';
-  console.log(chalk.blue('--- Deprecation warnings related to images can be ignored. ---'));
-  
-  return gulp.src('hugo/static/uploads/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}')
+  return gulp.src('hugo/static/uploads/**/*.*')
+    .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
     .pipe(gulp.dest('hugo/.images-temp/'));
@@ -39,7 +61,8 @@ function imgResponsive() {
 //
 // Optimize responsive images and copy to final location
 function imgMinJpg () {
-  return gulp.src(['src/images/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}', 'hugo/.images-temp/**/*.{jpg,jpeg,png,JPG,JPEG,PNG}'])
+  return gulp.src(['src/images/**/*.*', 'hugo/.images-temp/**/*.*'])
+    .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
@@ -55,7 +78,8 @@ function imgMinJpg () {
 //
 // Optimize and copy svg or gif images to final destination
 function imgMinGif () {
-  return gulp.src(['src/images/**/*.{svg,gif,SVG,GIF}', 'hugo/static/uploads/**/*.{svg,gif,SVG,GIF}'])
+  return gulp.src(['src/images/**/*.*', 'hugo/static/uploads/**/*.*'])
+    .pipe(plugins.filter(file => /\.(gif|svg)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))  
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
@@ -73,6 +97,42 @@ function makeLowerCaseExt (path) {
     path.extname = path.extname.toLowerCase();
 }
 
+// Generate favicon files. favicon.png is recommended to be 280 x 280px.
+// It will run once to create the icons and then only when changes are
+// made. Delete the hugo/static/faviconData.json file to force it.
+gulp.task('generate-favicon', function(done) {
+  var sha1sum = crypto.createHash('sha1');
+  var filename = 'src/images/favicon.png';
+
+  sha1sum.update(fs.readFileSync(filename));
+  var generated_hash = sha1sum.digest('hex');
+  
+  if (fs.existsSync(config.faviconDataFile)) {
+    var dataFile = JSON.parse(fs.readFileSync(config.faviconDataFile));
+    if (dataFile.generated_hash === generated_hash) {
+      console.log('Favicon files up-to-date for sha1: ' + generated_hash);
+      return done();
+    }
+  }
+  console.log('Generated sha1 for new favicon: ' + generated_hash);
+
+  plugins.realFavicon.generateFavicon(config.faviconOptions(filename, generated_hash), function() {
+    // Add generated_hash to details file
+    var dataFile = JSON.parse(fs.readFileSync(config.faviconDataFile));
+    dataFile["generated_hash"] = generated_hash;
+    fs.writeFileSync(config.faviconDataFile, JSON.stringify(dataFile, null, 2));
+    console.log("Generated new favicon files from " + chalk.underline("https://realfavicongenerator.net"));
+    done();
+  });
+});
+
+// Inject favicon links in the favicon html partial
+gulp.task('inject-favicon', function() {
+  fs.writeFileSync('hugo/layouts/partials/favicon.html', "");
+	return gulp.src('hugo/layouts/partials/favicon.html')
+		.pipe(plugins.realFavicon.injectFaviconMarkups(JSON.parse(fs.readFileSync(config.faviconDataFile)).favicon.html_code))
+		.pipe(gulp.dest('hugo/layouts/partials'));
+});
 
 //
 // CSS processing
@@ -177,22 +237,25 @@ function html () {
 //
 // Inject css and js into templates
 function injectHead () {
-  let modernizrPath = gulp.src(['hugo/static/scripts_vendor/modernizr.custom.js'], {read: false});
+  let modernizrPath = gulp.src('hugo/static/scripts_vendor/modernizr.custom.js', {read: false});
   let scriptsHead = gulp.src('hugo/static/scripts_head/*.js', {read: false});
-  let vendorCss = gulp.src('hugo/static/styles_vendor/*.css', {read: false});
   let projectCss = gulp.src('hugo/static/styles/*.css', {read: false});
-
+  let vendorCss = gulp.src('hugo/static/styles_vendor/*.css', {read: false});
+  
   return gulp.src('hugo/layouts/partials/head-meta.html')
-    .pipe(plugins.inject(sseries(modernizrPath, scriptsHead),
-      {transform: transformToHugoPaths, selfClosingTag: true, ignorePath: 'hugo/static/', name: 'head'}))
-    .pipe(plugins.inject(sseries(vendorCss, projectCss), {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
-    .pipe(gulp.dest('hugo/layouts/partials/'));
+  .pipe(plugins.inject(sseries(modernizrPath, scriptsHead),
+  {transform: transformToHugoPaths, selfClosingTag: true, ignorePath: 'hugo/static/', name: 'head'}))
+  .pipe(plugins.inject(sseries(vendorCss, projectCss),
+  {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
+  .pipe(gulp.dest('hugo/layouts/partials/'));
 }
 
 function injectFoot () {
+  let scriptsFooter = gulp.src('hugo/static/scripts/*.js', {read: false});
+  
   return gulp.src('hugo/layouts/partials/footer-scripts.html')
-    .pipe(plugins.inject(gulp.src(['hugo/static/scripts/*.js'],
-      {read: false}), {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
+    .pipe(plugins.inject(scriptsFooter,
+      {transform: transformToHugoPaths, ignorePath: 'hugo/static/'}))
     .pipe(gulp.dest('hugo/layouts/partials/'));
 }
 
@@ -396,7 +459,8 @@ gulp.task('default',
     gulp.parallel(cleanStatic, cleanLayouts, cleanDev),
     gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
-    gulp.parallel('copy', html, 'vendorStyles'),
+    gulp.parallel(copyDependenciesCss, copyDependenciesJsFooter,
+      'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
     gulp.parallel(injectHead, injectFoot),
     'hugoDev',
     'htmlDev',
@@ -409,7 +473,8 @@ gulp.task('dev',
     gulp.parallel(cleanStatic, cleanLayouts, cleanDev),
     gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
-    gulp.parallel('copy', html, 'vendorStyles'),
+    gulp.parallel(copyDependenciesCss, copyDependenciesJsHead, copyDependenciesJsFooter,
+      'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
     gulp.parallel(injectHead, injectFoot),
     'hugoDev',
     'htmlDev'
@@ -421,7 +486,8 @@ gulp.task('stage',
     gulp.parallel(cleanStatic, cleanLayouts, cleanStage),
     gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead),
-    gulp.parallel('copy', html, 'vendorStyles'),
+    gulp.parallel(copyDependenciesCss, copyDependenciesJsHead, copyDependenciesJsFooter,
+      'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
     gulp.parallel(injectHead, injectFoot),
     'hugoStage',
     'htmlStage'
@@ -433,7 +499,8 @@ gulp.task('live',
     gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
     gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
     gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead),
-    gulp.parallel('copy', html, 'vendorStyles'),
+    gulp.parallel(copyDependenciesCss, copyDependenciesJsHead, copyDependenciesJsFooter,
+      'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
     gulp.parallel(injectHead, injectFoot),
     'hugoLive',
     'htmlLive'
@@ -452,7 +519,8 @@ gulp.task('CircleCI-build',
       gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
       // gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead), -- not working right now
       gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
-      gulp.parallel('copy', html, 'vendorStyles'),
+      gulp.parallel(copyDependenciesCss, copyDependenciesJsHead, copyDependenciesJsFooter,
+        'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
       gulp.parallel(injectHead, injectFoot),
       'htmlLive'
     )

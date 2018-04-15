@@ -88,6 +88,78 @@ module.exports = {
     collapseWhitespace: true,
     conservativeCollapse: true,
     preserveLineBreaks: true
-  }
+  },
 
+  //
+  // Favicon generator
+  // 
+  faviconDataFile: 'hugo/static/faviconData.json',
+  faviconOptions: function(filename, generated_hash) {
+    return {
+      masterPicture: filename,
+      dest: 'hugo/static',
+      iconsPath: '/',
+      design: {
+        ios: {
+          pictureAspect: 'backgroundAndMargin',
+          backgroundColor: '#ffffff',
+          margin: '14%',
+          assets: {
+            ios6AndPriorIcons: false,
+            ios7AndLaterIcons: false,
+            precomposedIcons: false,
+            declareOnlyDefaultIcon: true
+          }
+        },
+        desktopBrowser: {},
+        windows: {
+          pictureAspect: 'noChange',
+          backgroundColor: '#da532c',
+          onConflict: 'override',
+          assets: {
+            windows80Ie10Tile: false,
+            windows10Ie11EdgeTiles: {
+              small: false,
+              medium: true,
+              big: false,
+              rectangle: false
+            }
+          }
+        },
+        androidChrome: {
+          pictureAspect: 'backgroundAndMargin',
+          margin: '17%',
+          backgroundColor: '#ffffff',
+          themeColor: '#ffffff',
+          manifest: {
+            display: 'standalone',
+            orientation: 'notSet',
+            onConflict: 'override',
+            declared: true
+          },
+          assets: {
+            legacyIcon: false,
+            lowResolutionIcons: false
+          }
+        },
+        safariPinnedTab: {
+          pictureAspect: 'blackAndWhite',
+          threshold: 75,
+          themeColor: '#5bbad5'
+        }
+      },
+      settings: {
+        scalingAlgorithm: 'Mitchell',
+        errorOnImageTooSmall: false,
+        readmeFile: false,
+        htmlCodeFile: false,
+        usePathAsIs: false
+      },
+      versioning: {
+        paramName: 'v',
+        paramValue: generated_hash
+      },
+      markupFile: 'hugo/static/faviconData.json'
+    }
+  }
 };
