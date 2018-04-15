@@ -9,7 +9,8 @@ jobs:
 
     environment:
       # Set the email address to use when commiting to repository
-      - OWNER_EMAIL: 
+      # Does not need to be a correct email, but you can change it
+      - OWNER_EMAIL: nobody@example.com
       
     working_directory: ~/repo
 
