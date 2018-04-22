@@ -5,7 +5,6 @@ var gulp = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var del = require('del');
 var lazypipe = require('lazypipe');
-var browserSync = require('browser-sync').create();
 var sseries = require('stream-series');
 var chalk = require('chalk');
 var crypto = require('crypto');
@@ -54,14 +53,16 @@ function imgResponsive() {
   return gulp.src('hugo/static/uploads/**/*.*')
     .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
+    .pipe(plugins.hashstore(config.responsiveHashstore,
+      { invalidateObject: [ config.responsiveOptions, config.responsiveGlobals ] }))
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
-    .pipe(gulp.dest('hugo/.images-temp/'));
+    .pipe(gulp.dest('hugo/images-cache/'));
 }
 
 //
 // Optimize responsive images and copy to final location
 function imgMinJpg () {
-  return gulp.src(['src/images/**/*.*', 'hugo/.images-temp/**/*.*'])
+  return gulp.src(['src/images/**/*.*', 'hugo/images-cache/**/*.*'])
     .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
@@ -80,7 +81,7 @@ function imgMinJpg () {
 function imgMinGif () {
   return gulp.src(['src/images/**/*.*', 'hugo/static/uploads/**/*.*'])
     .pipe(plugins.filter(file => /\.(gif|svg)$/i.test(file.path)))
-    .pipe(plugins.rename(makeLowerCaseExt))  
+    .pipe(plugins.rename(makeLowerCaseExt))
     .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
     .pipe(plugins.count({
@@ -110,11 +111,11 @@ gulp.task('generate-favicon', function(done) {
   if (fs.existsSync(config.faviconDataFile)) {
     var dataFile = JSON.parse(fs.readFileSync(config.faviconDataFile));
     if (dataFile.generated_hash === generated_hash) {
-      console.log('Favicon files up-to-date for sha1: ' + generated_hash);
+      console.log('Favicon files up-to-date for sha1: ' + generated_hash + '\n');
       return done();
     }
   }
-  console.log('Generated sha1 for new favicon: ' + generated_hash);
+  console.log('Generated sha1 for new favicon: ' + generated_hash + '\n');
 
   plugins.realFavicon.generateFavicon(config.faviconOptions(filename, generated_hash), function() {
     // Add generated_hash to details file
@@ -140,7 +141,7 @@ function postCss () {
   return gulp.src('src/styles/*.{css,pcss}')
     .pipe(plugins.inlinerjs())
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.postcss(config.processors))
+    .pipe(plugins.postcss(config.processors()))
     .pipe(plugins.rename({extname: '.css'}))
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest('hugo/static/styles/'));
@@ -151,7 +152,7 @@ function minpostCss () {
   return gulp.src('src/styles/*.{css,pcss}')
     .pipe(plugins.inlinerjs())
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.postcss(config.minProcessors))
+    .pipe(plugins.postcss(config.minProcessors()))
     .pipe(plugins.rename({extname: '.min.css'}))
     .pipe(plugins.sourcemaps.write('.'))
     .pipe(gulp.dest('hugo/static/styles/'));
@@ -377,12 +378,10 @@ function cleanLayouts (done) {
   return del(['hugo/layouts/**/*.html'], done);
 }
 
-// Clean temporary image files created during processing
+// Clean final image files created during processing
 function cleanImages (done) {
   return del([
-    'hugo/.images-temp/*',
-    'hugo/static/images/*',
-    'hugo/static/images/responsive/*'
+    'hugo/static/images/*'
   ], done);
 }
 
@@ -401,8 +400,11 @@ function reload(done) {
   done();
 }
 
+var browserSync;
+
 // Watch files and serve with Browsersync
 gulp.task('watcher', (done) => {
+  browserSync = require('browser-sync').create();
 
   // Start a server
   browserSync.init({
@@ -420,7 +422,7 @@ gulp.task('watcher', (done) => {
 
   // Watch files for changes
   addWatcher('hugo/static/uploads/**/*', imgResponsive);
-  addWatcher(['src/images/**/*', 'hugo/.images-temp/**/*'], gulp.series(imgMinJpg, imgMinGif, 'hugoDev', 'htmlDev', reload));
+  addWatcher(['src/images/**/*', 'hugo/images-cache/**/*'], gulp.series(imgMinJpg, imgMinGif, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/styles/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/styles/partials/*.{css,pcss}', gulp.series(postCss, injectHead, 'hugoDev', 'htmlDev', reload));
   addWatcher('src/styles_vendor/*.css', gulp.series('vendorStyles', injectHead, 'hugoDev', 'htmlDev', reload));
@@ -518,7 +520,7 @@ gulp.task('CircleCI-build',
     gulp.series(
       gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
       // gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead), -- not working right now
-      gulp.parallel('custoModernizr', postCss, scripts, scriptsHead),
+      gulp.parallel('custoModernizr', minpostCss, scripts, scriptsHead),
       gulp.parallel(copyDependenciesCss, copyDependenciesJsHead, copyDependenciesJsFooter,
         'copy', html, 'vendorStyles', gulp.series('generate-favicon', 'inject-favicon')),
       gulp.parallel(injectHead, injectFoot),

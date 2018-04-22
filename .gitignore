@@ -5,13 +5,13 @@ node_modules
 bower_components
 
 # tmp files
-hugo/.images-temp
 .cache-*
 
 # Hugo
 hugo/public
 hugo/published
 hugo/layouts
+hugo/images-cache
 # Everything static is rebuilt except the uploads dir
 !hugo/static
 hugo/static/*

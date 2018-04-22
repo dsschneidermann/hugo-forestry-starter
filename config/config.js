@@ -33,6 +33,8 @@ module.exports = {
     }]
   },
 
+  responsiveHashstore: 'hugo/images-cache/responsiveHashstore.json',
+
   // Responsive global options
   responsiveGlobals: {
     quality: 86,
@@ -40,13 +42,13 @@ module.exports = {
     withMetadata: false,
     withoutEnlargement: false,
     errorOnEnlargement: false,
-    errorOnUnusedConfig: false,
+    errorOnUnusedConfig: false
   },
 
   //
   // PostCSS plugins and their options
   // For dev
-  processors: [
+  processors: () => [
     require('postcss-import')(),
     require('postcss-normalize')(),
     require('postcss-cssnext')(),
@@ -60,7 +62,7 @@ module.exports = {
     })
   ],
   // For stage and live
-  minProcessors: [
+  minProcessors: () => [
     require('postcss-import')(),
     require('postcss-normalize')(),
     require('postcss-cssnext')({ warnForDuplicates: false }),
