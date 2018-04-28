@@ -1,0 +1,44 @@
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>
+  {{ if .IsHome }}
+    {{ .Site.Title }}
+  {{ else }}
+    {{ if .Title }}{{ .Title }} - {{ end }}{{ .Site.Title }}
+  {{ end }}
+</title>
+<meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ end }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Hugo-specific bits -->
+{{ if .RSSLink }}
+  <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+  <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+{{ end }}
+{{ .Hugo.Generator }}
+
+<!-- Bootstrap Core CSS -->
+<link href='{{ "/css/bootstrap.min.css" | relURL }}' rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href='{{ "/css/clean-blog.min.css" | relURL }}' rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+<!-- inject:css -->
+<link href="{{ "/styles/inline-images.min.css" | relURL }}" rel="stylesheet" type="text/css">
+<link href="{{ "/styles/instagram-widget.min.css" | relURL }}" rel="stylesheet" type="text/css">
+<link href="{{ "/styles/main.min.css" | relURL }}" rel="stylesheet" type="text/css">
+<link href="{{ "/styles/preloader.min.css" | relURL }}" rel="stylesheet" type="text/css">
+<link href="{{ "/styles/print.min.css" | relURL }}" rel="stylesheet" type="text/css">
+<!-- endinject -->
+
+<!-- head:js -->
+<script src="{{ "/scripts_vendor/modernizr.custom.js" | relURL }}"></script>
+<script src="{{ "/scripts_head/head.js" | relURL }}"></script>
+<!-- endinject -->
+
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">

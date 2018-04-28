@@ -1,0 +1,61 @@
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <div class="icon-bar"></div>
+                <div class="icon-bar"></div>
+                <div class="icon-bar"></div>
+            </button>
+            {{ if (fileExists "/static/images/navbar-logo.png") }}
+              <a class="navbar-brand" href="{{ .Site.BaseURL | absURL }}">
+                <div class="hidden-sm hidden-md hidden-lg hidden-xlg">
+                  {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
+                </div>
+                <div class="hidden-xs">
+                  {{ if (fileExists "/static/images/navbar-logo-neg.png") }}
+                    {{ partial "image-prepared-2x" "/images/navbar-logo-neg.png" }}
+                  {{ else }}
+                    {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
+                  {{ end }}
+                </div>
+              </a>
+            {{ end }}
+        </div>
+
+        {{ partial "navbar.html" . }}
+    </div>
+</nav>
+
+<!-- Page Header -->
+<header data-responsive-background-image class="intro-header" style="width: 100%;">
+  {{ if not (.Params.image | default "" | eq "") }}
+    {{ partial "image-srcset" (dict "path" .Params.image "sizes" "100vw" ) }}
+  {{ else if not (.Site.Params.image | default "" | eq "") }}
+    {{ partial "image-srcset" (dict "path" .Site.Params.image "sizes" "100vw" ) }}
+  {{ end }}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          {{ if .IsHome }}
+            {{ with .Site.Title }}
+              <h1>{{ . }}</h1>
+            {{ end }}
+          {{ else }}
+            {{ with .Title }}
+              <h1>{{ . }}</h1>
+            {{ end }}
+          {{ end }}
+          {{ with .Params.Subtitle }}
+            <hr class="small">
+            <h2 class="subheading">{{ . }}</h2>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

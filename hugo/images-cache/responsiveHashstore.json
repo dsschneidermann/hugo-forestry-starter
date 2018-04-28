@@ -1,0 +1,21 @@
+{
+  "invalidateObjectHash": "a8d8b13948ac523bffa0232af4483d0a8ab0237e",
+  "files": [
+    {
+      "file": "hugo/static/uploads/2018/01/01/unsplash-brandon-lam-29892.jpg",
+      "generated_hash": "a84812affd83ed600d97b1513ae5b0a38938d47b"
+    },
+    {
+      "file": "hugo/static/uploads/2018/01/01/unsplash-garrett-parker-247225.jpg",
+      "generated_hash": "c176669d402743891080555bc2588ba8bf031245"
+    },
+    {
+      "file": "hugo/static/uploads/2018/01/01/unsplash-jason-wong-292853.jpg",
+      "generated_hash": "e8aedb874cce49bbafc00ab2c3a7a8f590b6405a"
+    },
+    {
+      "file": "hugo/static/uploads/2018/01/01/unsplash-jonatan-pie-234237.jpg",
+      "generated_hash": "c187ae81aef3bd414b5395bd4c7738e5b0e05c88"
+    }
+  ]
+}

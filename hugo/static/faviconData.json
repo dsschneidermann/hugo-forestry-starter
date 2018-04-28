@@ -1,0 +1,33 @@
+{
+  "result": {
+    "status": "success"
+  },
+  "favicon": {
+    "package_url": "https://realfavicongenerator.net/files/adc59f77b069ced372e2683ce32fbabcf8e88cd0/favicon_package_v0.16.zip",
+    "files_urls": [
+      "https://realfavicongenerator.net/files/adc59f77b069ced372e2683ce32fbabcf8e88cd0/package_files/favicon-16x16.png",
+      "https://realfavicongenerator.net/files/adc59f77b069ced372e2683ce32fbabcf8e88cd0/package_files/favicon-32x32.png",
+      "https://realfavicongenerator.net/files/adc59f77b069ced372e2683ce32fbabcf8e88cd0/package_files/favicon.ico"
+    ],
+    "html_code": "<link rel=\"apple-touch-icon\" sizes=\"x\" href=\"/apple-touch-icon.png?v=079ed719ff0de2d4c93310689ddba34cdd9595db\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32x32.png?v=079ed719ff0de2d4c93310689ddba34cdd9595db\">\n<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/favicon-16x16.png?v=079ed719ff0de2d4c93310689ddba34cdd9595db\">\n<link rel=\"manifest\" href=\"/site.webmanifest?v=079ed719ff0de2d4c93310689ddba34cdd9595db\">\n<link rel=\"mask-icon\" href=\"/safari-pinned-tab.svg?v=079ed719ff0de2d4c93310689ddba34cdd9595db\" color=\"#5bbad5\">\n<link rel=\"shortcut icon\" href=\"/favicon.ico?v=079ed719ff0de2d4c93310689ddba34cdd9595db\">\n<meta name=\"msapplication-TileColor\" content=\"#da532c\">\n<meta name=\"theme-color\" content=\"#ffffff\">",
+    "compression": "false",
+    "overlapping_markups": [
+      "link[rel=\"apple-touch-icon\"]",
+      "link[rel=\"shortcut\"]",
+      "link[rel=\"shortcut icon\"]",
+      "link[rel=\"icon\",sizes=\"16x16\"]",
+      "link[rel=\"icon\",sizes=\"32x32\"]",
+      "meta[name=\"msapplication-TileColor\"]",
+      "link[rel=\"manifest\"]",
+      "meta[name=\"theme-color\"]",
+      "link[rel=\"mask-icon\"]"
+    ]
+  },
+  "files_location": {
+    "type": "path",
+    "path": "/"
+  },
+  "preview_picture_url": "https://realfavicongenerator.net/files/adc59f77b069ced372e2683ce32fbabcf8e88cd0/favicon_preview.png",
+  "version": "0.16",
+  "generated_hash": "079ed719ff0de2d4c93310689ddba34cdd9595db"
+}

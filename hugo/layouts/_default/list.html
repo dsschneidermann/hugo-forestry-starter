@@ -1,0 +1,40 @@
+<!doctype html>
+<html class="no-js" lang="{{ .Site.LanguageCode }}">
+<head>
+  {{ partial "head-meta.html" . }}
+</head>
+<body>
+  <!--[if lte IE 9]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+<div id="barba-wrapper">
+<div class="barba-container">
+
+{{ partial "header.html" . }}
+
+<!-- Post Content -->
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        {{ .Content }}
+        <ul>
+          {{ range .Data.Pages }}
+        <li><a href="{{ .Permalink | relURL }}">{{ .Title }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ partial "footer.html" . }}
+
+</div>
+</div>
+
+{{ partial "footer-scripts.html" . }}
+
+</body>
+</html>

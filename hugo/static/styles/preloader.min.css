@@ -1,0 +1,2 @@
+.preloader{position:fixed;z-index:1;height:100%;width:100%;overflow:hidden!important;background-color:#000;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.preloader .loader-image-anim{width:30%;height:5%;background-size:contain;background-repeat:no-repeat;background-position:50%}
+/*# sourceMappingURL=preloader.min.css.map */
