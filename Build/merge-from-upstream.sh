@@ -2,8 +2,7 @@
 cd "$(dirname "$0")"
 cd ..
 git remote add upstream https://github.com/dsschneidermann/hugo-forestry-starter
-git fetch upstream
-git checkout master
+git fetch upstream master
 
 git status | grep -q "nothing to commit"
 if [ $? -ne 0 ]
