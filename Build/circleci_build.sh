@@ -97,7 +97,7 @@ fi
 
 echo
 echo "--- Git commit build result ---"
-git add -f yarn.lock ./hugo/static/* ./hugo/layouts/*
+git add -f yarn.lock ./hugo/static/* ./hugo/layouts/* ./hugo/images-cache/*
 git status -s
 git status --untracked-files=no | grep -q "nothing to commit"
 if [ $? -eq 0 ]
