@@ -20,7 +20,7 @@ jobs:
       # Download and cache dependencies (change v-num for cache bust)
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "yarn.lock" }}
 
       - run:
           name: Yarn Install
@@ -28,7 +28,7 @@ jobs:
 
       # Store yarn / node cache
       - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
             - node_modules
@@ -36,6 +36,10 @@ jobs:
       - run:
           name: Build and push to repository
           command: bash ./Build/circleci_build.sh
+
+      - store_artifacts:
+          path: ~/repo/yarn.lock
+          destination: yarn.lock
 
 workflows:
   version: 2
