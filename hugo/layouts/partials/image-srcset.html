@@ -16,12 +16,12 @@
   {{ $fallback := (printf $formatStr $filename (index $set 0) $extLower) }}
 
   {{ if fileExists (print "/static/" $fallback) }}
-    <img src="{{ $fallback | relURL }}"
-      srcset="{{ range $set }}{{ (printf $formatStr $filename . $extLower) | relURL }} {{ string . }}w, {{ end }}"
+    <img src="{{ $fallback | safeURL }}"
+      srcset="{{ range $set }}{{ (printf $formatStr $filename . $extLower) | safeURL }} {{ string . }}w, {{ end }}"
       sizes="{{ $sizes }}">
   {{ else }}
-    <img src="{{ $path | relURL }}">
+    <img src="{{ $path | safeURL }}">
   {{ end }}
 {{ else }}
-  <img src="{{ $path | relURL }}">
+  <img src="{{ $path | safeURL }}">
 {{ end }}
