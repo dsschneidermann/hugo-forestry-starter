@@ -15,7 +15,7 @@
 {{ $image := imageConfig (print "/static/" $imagePath) }}
 {{ $imageDouble := imageConfig (print "/static/" $imageDoublePath) }}
 
-<img src="{{ $imagePath | relURL }}"
+<img src="{{ $imagePath | safeURL }}"
   width="{{ $image.Width }}px"
-  srcset="{{ $imagePath | relURL }} 1x,
-          {{ $imageDoublePath | relURL }} 2x">
+  srcset="{{ $imagePath | safeURL }} 1x,
+          {{ $imageDoublePath | safeURL }} 2x">

@@ -1,7 +1,7 @@
 # hugo-forestry-starter
 Created from the fantastic [web-starter-hugo](https://github.com/adrinux/web-starter-hugo), this is a fully fleshed out starter website with a headless CMS and deployment provided by [Forestry](https://forestry.io) and continous integration by [CircleCI](https://circleci.com).
 
-Like the base web-starter-hugo, this project uses gulp to process images, javascript, css and html into a Hugo site. The supported Hugo version is currently 0.31.1.
+Like the base web-starter-hugo, this project uses gulp to process images, javascript, css and html into a Hugo site. The supported Hugo version is currently 0.38.1.
 
 ## Features
 - [Forestry](https://forestry.io) as content management system (**free** for up to three users), runs Hugo for your users, allows preview of changes before publish
@@ -112,7 +112,7 @@ Login to [Netlify](https://netlify.com) with your GitHub account and add a new s
     Production branch: ```content```
 * Add environment variable:
 
-     HUGO_VERSION: 0.31.1
+     HUGO_VERSION: 0.38.1
 
 Due to the -v flag given, you will be able to see any errors that occur from the Hugo build.
 
