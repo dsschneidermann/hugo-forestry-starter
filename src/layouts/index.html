@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="{{ .Site.LanguageCode }}">
+<html class="no-js" lang="{{ .Lang }}">
 <head>
   {{ partial "head-meta.html" . }}
 
@@ -10,7 +10,7 @@
 
   <!-- Inlined stylesheet for inlined-images -->
   <style type="text/css" media="all">
-      /* $inline.line("../styles/inline-images.css|cssmin"); */
+    /* $inline.line("../styles/inline-images.css|cssmin"); */
   </style>  
 </head>
 <body>
@@ -18,9 +18,9 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
 
-<div class="preloader">
-  <div class="loader-image-anim"></div>
-</div>
+  <div class="preloader">
+    <div class="loader-image-anim"></div>
+  </div>  
 
 <div id="barba-wrapper">
 <div class="barba-container">
@@ -28,28 +28,28 @@
 {{ partial "header.html" . }}
 
 <article>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-lg-offset-2 col-md-10 col-md-offset-1">
-              {{ if .Params.rendertoc }}
-              {{ .TableOfContents }}
-              {{ end }}
-              {{ .Content }}
-              {{ partial "comments.html" .}}
-            </div>
-            <div class="col-lg-2 lg-nopadding col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
-              <div class="instagram-widget">
-                <ul class="list-inline text-center">
-                  <li>
-                  <a class="btn btn-primary" href="https://www.instagram.com/roestcph/" target="_blank">
-                      <span class="fa fa-lg fa-instagram">&nbsp;Follow on Insta</span>
-                  </a></li>
-                </ul>
-              <!-- LightWidget WIDGET --><script src="//lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/98d4fd1ece6a5b2bbecac2aa6b329a81.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
-            </div>
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-6 col-lg-offset-2 col-md-10 col-md-offset-1">
+            {{ if .Params.rendertoc }}
+            {{ .TableOfContents }}
+            {{ end }}
+            {{ .Content }}
+            {{ partial "comments.html" .}}
+          </div>
+          <div class="col-lg-2 lg-nopadding col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+            <div class="instagram-widget">
+              <ul class="list-inline text-center">
+                <li>
+                <a class="btn btn-primary" href="https://www.instagram.com/roestcph/" target="_blank">
+                    <span class="fa fa-lg fa-instagram">&nbsp;Follow on Insta</span>
+                </a></li>
+              </ul>
+            <!-- LightWidget WIDGET --><script src="//lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/98d4fd1ece6a5b2bbecac2aa6b329a81.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
           </div>
         </div>
-    </div>
+      </div>
+  </div>
 </article>
 
 {{ partial "footer.html" . }}

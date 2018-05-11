@@ -1,17 +1,21 @@
-baseurl = "https://websitename.github.io/"
+baseurl = "https://hugo-forestry-starter.netlify.com/"
 canonifyurls = false
 copyright = "Open Source under the MIT license."
 disableKinds = ["404", "taxonomyTerm", "taxonomy"]
 enableEmoji = true
 googleAnalytics = ""
-languageCode = "en-us"
+DefaultContentLanguage = "en"
 paginate = 10
 relativeurls = false
 theme = "startbootstrap-clean-blog"
 title = "Website Title"
 [author]
 name = ""
-[[menu.main]]
+[languages]
+[languages.en]
+weight = 1
+languageName = "English"
+[[languages.en.menu.main]]
 identifier = "home"
 name = "Home"
 url = "/"

@@ -11,7 +11,7 @@
                 <div class="icon-bar"></div>
             </button>
             {{ if (fileExists "/static/images/navbar-logo.png") }}
-              <a class="navbar-brand" href="{{ .Site.BaseURL | absURL }}">
+              <a class="navbar-brand" href="{{ .Site.BaseURL | absLangURL }}">
                 <div class="hidden-sm hidden-md hidden-lg hidden-xlg">
                   {{ partial "image-prepared-2x" "/images/navbar-logo.png" }}
                 </div>
