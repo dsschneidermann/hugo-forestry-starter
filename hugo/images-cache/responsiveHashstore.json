@@ -1,21 +1,115 @@
 {
+  "version": "0.2.0",
   "invalidateObjectHash": "a8d8b13948ac523bffa0232af4483d0a8ab0237e",
-  "files": [
+  "outputTrackingEnabled": true,
+  "inputs": [
     {
       "file": "hugo/static/uploads/2018/01/01/unsplash-brandon-lam-29892.jpg",
-      "generated_hash": "a84812affd83ed600d97b1513ae5b0a38938d47b"
+      "generated_hash": "a84812affd83ed600d97b1513ae5b0a38938d47b",
+      "last_changed": 1526934813639,
+      "outputs": [
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-brandon-lam-29892-320x.jpg",
+          "generated_hash": "2b56b68eca0c6b8c2205c065d915a89ae8946bdf",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-brandon-lam-29892-640x.jpg",
+          "generated_hash": "8816d0eee1d4016389ce78dd7127ab7c95fe50fa",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-brandon-lam-29892-1280x.jpg",
+          "generated_hash": "f31d140a866a29bcfdaf40e0b8775cf4a9d3c60a",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-brandon-lam-29892-1920x.jpg",
+          "generated_hash": "0311e9ebcc6766781ed3d4e085748153ef2c51e8",
+          "last_changed": 1526934813639
+        }
+      ]
     },
     {
       "file": "hugo/static/uploads/2018/01/01/unsplash-garrett-parker-247225.jpg",
-      "generated_hash": "c176669d402743891080555bc2588ba8bf031245"
+      "generated_hash": "c176669d402743891080555bc2588ba8bf031245",
+      "last_changed": 1526934813639,
+      "outputs": [
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-garrett-parker-247225-320x.jpg",
+          "generated_hash": "fc61b006f3ddd05bfe9e2fb206a5ff6e98f81354",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-garrett-parker-247225-640x.jpg",
+          "generated_hash": "018b51527035a79d1214e8047df0ddc83737232f",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-garrett-parker-247225-1280x.jpg",
+          "generated_hash": "799c36fe3875363060d1360b2823f0f477769bae",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-garrett-parker-247225-1920x.jpg",
+          "generated_hash": "b9bafe247bf983b9384fa01bdb769b89b23bf962",
+          "last_changed": 1526934813639
+        }
+      ]
     },
     {
       "file": "hugo/static/uploads/2018/01/01/unsplash-jason-wong-292853.jpg",
-      "generated_hash": "e8aedb874cce49bbafc00ab2c3a7a8f590b6405a"
+      "generated_hash": "e8aedb874cce49bbafc00ab2c3a7a8f590b6405a",
+      "last_changed": 1526934813639,
+      "outputs": [
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jason-wong-292853-320x.jpg",
+          "generated_hash": "15d903dda08b946cf6aae5c692ca14eaca0bc3ff",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jason-wong-292853-640x.jpg",
+          "generated_hash": "f97edffb8b0548041c94aba91bc924a7577db538",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jason-wong-292853-1280x.jpg",
+          "generated_hash": "32b0aac481f001b4d4e641feea1437d35f6ce161",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jason-wong-292853-1920x.jpg",
+          "generated_hash": "47477c8212e598004706b0f28123e65e024f98de",
+          "last_changed": 1526934813639
+        }
+      ]
     },
     {
       "file": "hugo/static/uploads/2018/01/01/unsplash-jonatan-pie-234237.jpg",
-      "generated_hash": "c187ae81aef3bd414b5395bd4c7738e5b0e05c88"
+      "generated_hash": "c187ae81aef3bd414b5395bd4c7738e5b0e05c88",
+      "last_changed": 1526934813639,
+      "outputs": [
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jonatan-pie-234237-320x.jpg",
+          "generated_hash": "c2b116cc0aa344149961a13749f6f87a1a4ea827",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jonatan-pie-234237-640x.jpg",
+          "generated_hash": "d6227d7c038cf13b94d959961364a02641a0fe82",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jonatan-pie-234237-1280x.jpg",
+          "generated_hash": "8241333ef61cfffec56f5054f82a13a162b2215c",
+          "last_changed": 1526934813639
+        },
+        {
+          "file": "hugo/images-cache/2018/01/01/unsplash-jonatan-pie-234237-1920x.jpg",
+          "generated_hash": "68d46d5684cde6d34cc9a6eb84f88ebfda36bb82",
+          "last_changed": 1526934813639
+        }
+      ]
     }
   ]
 }
