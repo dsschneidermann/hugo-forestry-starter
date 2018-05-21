@@ -10,6 +10,8 @@ var chalk = require('chalk');
 var crypto = require('crypto');
 var fs = require('fs');
 
+var hashstore = require('gulp-hashstore');
+
 // Auto load Gulp plugins
 const plugins = gulpLoadPlugins({
   rename: {
@@ -53,10 +55,14 @@ function imgResponsive() {
   return gulp.src('hugo/static/uploads/**/*.*')
     .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
-    .pipe(plugins.hashstore(config.responsiveHashstore,
-      { invalidateObject: [ config.responsiveOptions, config.responsiveGlobals ] }))
+    .pipe(plugins.hashstore.sources(config.responsiveHashstore, {
+        invalidateObject: [ config.responsiveOptions, config.responsiveGlobals ],
+        outputPostfixes: Object.values(config.responsiveOptions).map(
+          pattern => pattern.map(item => item.rename.suffix)).flatten()
+      }))
     .pipe(plugins.responsive(config.responsiveOptions, config.responsiveGlobals))
-    .pipe(gulp.dest('hugo/images-cache/'));
+    .pipe(gulp.dest('hugo/images-cache/'))
+    .pipe(plugins.hashstore.results(config.responsiveHashstore));
 }
 
 //
@@ -65,32 +71,22 @@ function imgMinJpg () {
   return gulp.src(['src/images/**/*.*', 'hugo/images-cache/**/*.*'])
     .pipe(plugins.filter(file => /\.(jpg|jpeg|png)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
-    .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
+    .pipe(plugins.hashstore.sources(config.imageminJpgHashstore, { logTree: false }))
+    .pipe(plugins.imagemin({verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
-    .pipe(plugins.count({
-      message: 'gulp-imagemin: ' + chalk.magenta('Copied') + ' ## ' + chalk.magenta('jpg/jpeg/png files.'),
-      logger: function (msg) {
-        var time = new Date().toTimeString().split(' ')[0];
-        console.log("[" + chalk.grey(time) + "] " + msg);
-      }
-    }));
+    .pipe(plugins.hashstore.results(config.imageminJpgHashstore));
 }
 
 //
 // Optimize and copy svg or gif images to final destination
 function imgMinGif () {
-  return gulp.src(['src/images/**/*.*', 'hugo/static/uploads/**/*.*'])
+  return gulp.src(['src/images/**/*.*', 'hugo/images-cache/**/*.*'])
     .pipe(plugins.filter(file => /\.(gif|svg)$/i.test(file.path)))
     .pipe(plugins.rename(makeLowerCaseExt))
-    .pipe(plugins.imagemin(config.imageminOptions, {verbose: true}))
+    .pipe(plugins.hashstore.sources(config.imageminGifHashstore, { logTree: false }))
+    .pipe(plugins.imagemin({verbose: true}))
     .pipe(gulp.dest('hugo/static/images/'))
-    .pipe(plugins.count({
-      message: 'gulp-imagemin: ' + chalk.magenta('Copied') + ' ## ' + chalk.magenta('svg/gif files.'),
-      logger: function (msg) {
-        var time = new Date().toTimeString().split(' ')[0];
-        console.log("[" + chalk.grey(time) + "] " + msg);
-      }
-    }));
+    .pipe(plugins.hashstore.results(config.imageminGifHashstore));
 }
 
 // Image output generation can be iffy unless lowercase extensions are used..
@@ -510,13 +506,13 @@ gulp.task('live',
 );
 
 // Task used for debugging function based task or tasks
-gulp.task('dt', gulp.series('copy'));
+gulp.task('dt', gulp.series(imgResponsive, imgMinGif, imgMinJpg));
 
 // Same task as 'gulp live' for production only
 // Optimized a bit to parallelize image processing
 gulp.task('CircleCI-build',
   gulp.parallel(
-    gulp.series(cleanImages, imgResponsive, imgMinJpg, imgMinGif),
+    gulp.series(imgResponsive, imgMinJpg, imgMinGif),
     gulp.series(
       gulp.parallel(cleanStatic, cleanLayouts, cleanLive),
       // gulp.parallel('custoModernizr', minpostCss, minscripts, minscriptsHead), -- not working right now

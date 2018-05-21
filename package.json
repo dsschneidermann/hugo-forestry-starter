@@ -48,7 +48,7 @@
     "gulp-count": "^1.0.0",
     "gulp-eslint": "^4.0.0",
     "gulp-filter": "^5.1.0",
-    "gulp-hashstore": "^0.1.0",
+    "gulp-hashstore": "^0.2.2",
     "gulp-htmlmin": "^3.0.0",
     "gulp-htmltidy": "^0.2.3",
     "gulp-imagemin": "^4.0.0",

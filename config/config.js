@@ -45,6 +45,9 @@ module.exports = {
     errorOnUnusedConfig: false
   },
 
+  imageminJpgHashstore: 'hugo/static/images/imageminJpgHashstore.json',
+  imageminGifHashstore: 'hugo/static/images/imageminGifHashstore.json',
+
   //
   // PostCSS plugins and their options
   // For dev

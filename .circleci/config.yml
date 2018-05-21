@@ -5,7 +5,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10.1
 
     environment:
       # Set the email address to use when commiting to repository
@@ -20,7 +20,7 @@ jobs:
       # Download and cache dependencies (change v-num for cache bust)
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "yarn.lock" }}
+          - v1.2-dependencies-{{ checksum "yarn.lock" }}
 
       - run:
           name: Yarn Install
@@ -28,7 +28,7 @@ jobs:
 
       # Store yarn / node cache
       - save_cache:
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1.2-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
             - node_modules
