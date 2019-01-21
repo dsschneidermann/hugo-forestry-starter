@@ -3,6 +3,10 @@ Created from the fantastic [web-starter-hugo](https://github.com/adrinux/web-sta
 
 Like the base web-starter-hugo, this project uses gulp to process images, javascript, css and html into a Hugo site. The supported Hugo version is currently 0.38.1.
 
+## Important to note
+
+Be aware that Hugo is currently up to version 0.53 (as of Jan 2019) and supports built-in image rescaling and cropping and that Forestry.io is now capable of building your site with NodeJS, npm/yarn and more (see [Build](https://forestry.io/docs/settings/build-commands/)). The main reason for this starter kit was to work around those two limitations. Today it can probably be done with fewer moving parts and I will accept any pull requests that upgrade to use them.
+
 ## Features
 - [Forestry](https://forestry.io) as content management system (**free** for up to three users), runs Hugo for your users, allows preview of changes before publish
 - [CircleCI](https://circleci.com) for continuous integration (**free**), runs your gulp tasks and can do any pre-processing needed for your Hugo site to be perfect
